@@ -7,6 +7,7 @@ const session = require('express-session');
 const loginRoutes = require('./routes/login');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const app= express();
 
@@ -31,6 +32,15 @@ app.engine('.hbs', engine({
 }));
 app.set('view engine', 'hbs');
 
+//bodyparser sera usado para acceder a informacion del cuerpo de las peticiones
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
+
+//morgan sera usado para ver todas las peticiones que se hagan al servidor
+app.use(morgan('dev'))
 
 //base de datos
 app.use(myconnection(mysql, {
@@ -55,4 +65,7 @@ app.get('/',(req,res)=>{
 app.use('/static', express.static('src/public'));
 
 
-
+//Al acceder a cualquier ruta no existente mandara a una página de error
+app.get('*', (req, res) => {
+    res.render('error/');
+});
