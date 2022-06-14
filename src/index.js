@@ -23,12 +23,12 @@ app.listen(app.get('port'), ()=>{
 //motor de plantilla
 
 
-app.set('views', __dirname + '/vistas');
+app.set('views', __dirname + '/views');
 app.engine('.hbs', engine({
     extname: '.hbs',
     defaultLayout: 'main', 
-    layoutsDir: __dirname + '/vistas/layouts/',
-    partialsDir: __dirname + '/vistas/partials/'
+    layoutsDir: __dirname + '/views/layouts/',
+    partialsDir: __dirname + '/views/partials/'
 }));
 app.set('view engine', 'hbs');
 
@@ -62,7 +62,7 @@ app.get('/',(req,res)=>{
 });
 
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
-app.use('/static', express.static('src/public'));
+app.use('/static', express.static('src/views/public'));
 
 
 //Al acceder a cualquier ruta no existente mandara a una página de error
