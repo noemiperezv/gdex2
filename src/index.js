@@ -5,6 +5,7 @@ const myconnection = require('express-myconnection');
 const mysql = require('mysql');
 const session = require('express-session');
 const loginRoutes = require('./routes/login');
+const indexRoutes = require('./routes/index');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -47,7 +48,7 @@ app.use(myconnection(mysql, {
     host: 'localhost',
     user: 'root',
     password: '',
-    port: '3309',
+    port: '3306',
     database: 'gdex'
 }));
 
@@ -59,6 +60,12 @@ app.use('/login', loginRoutes);
 
 app.get('/',(req,res)=>{
     res.send("Bienvenidos");
+});
+
+app.use('/index', indexRoutes);
+
+app.get('/index',(req,res)=>{
+    res.send('/index');
 });
 
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.

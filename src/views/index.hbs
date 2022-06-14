@@ -1,15 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {{> header dato="Hola"}}
-    <H1>hola</H1>
 
-    <img src="/static/img/gdex.jpg" height="100px" width="150px">
-</body>
-</html>
+<h4>{{> header dato="Cursos disponibles"}}</h4>
+
+<hr>
+
+
+
+
+<div class="card-columns">
+  {{#each cursos}}
+  <div class="card">
+    <img class="card-img-top" src="/static/img/logo.png" style="width:auto; height:150px;" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title"><p>{{nombre}}</p></h5>    
+      <details>
+        <summary>Más información</summary>
+        <p>{{descripcion}}</p>
+      </details>
+
+      <br>
+      <br>
+
+      <p class="card-text" style="float: left;">
+        <i class="icon-calendar"></i>&nbsp;&nbsp;{{fecha}}
+      </p>
+      <p class="card-text" style="float: right;">
+        <i class="icon-user"></i>&nbsp;&nbsp;{{nombreCompleto}}
+      </p> 
+    </div>
+  </div>
+  {{/each}}
+  
+</div>
+
+
+
+
+{{> scripts}}
