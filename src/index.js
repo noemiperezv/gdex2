@@ -5,6 +5,7 @@ const myconnection = require('express-myconnection');
 const mysql = require('mysql');
 const session = require('express-session');
 const loginRoutes = require('./routes/login');
+const signupRoutes = require('./routes/signup');
 const indexRoutes = require('./routes/index');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
@@ -67,6 +68,9 @@ app.use('/index', indexRoutes);
 app.get('/index',(req,res)=>{
     res.send('/index');
 });
+
+app.use('/signup', signupRoutes);
+
 
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
 app.use('/static', express.static('src/views/public'));

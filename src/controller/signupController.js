@@ -1,7 +1,7 @@
 
-function login(req, res) {
+function signup(req, res) {
     
-    res.render("auth/login")
+    res.render("auth/signup")
 
 }
 function consulta(req, res) {
@@ -17,6 +17,6 @@ function consulta(req, res) {
     });
 }
 module.exports = {
-    login,
+    signup,
     consulta
 }

@@ -1,0 +1,56 @@
+<h4>{{> header}}</h4>
+
+<hr>
+
+<div class="Container">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <div class="centrado separado">
+                <img src="/static/img/logo.png" style="width:auto; height:90px;" alt="Imagen no disponible">
+            </div>
+            <form class="border-black">
+                <div class="form-group ">
+                    <label for="exampleInputName">Nombre</label>
+                    <input type="text" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Ingrese su nombre">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputLastName">Apellidos</label>
+                    <input type="text" class="form-control" id="exampleInputLastName" aria-describedby="lastNameHelp" placeholder="Ingrese sus apellidos">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName">Correo electrónico</label>
+                    <input type="text" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Ingrese su correo electrónico">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlRol">Rol</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option value="">Seleccionar</option>
+                        <option value="1">Instructor</option>
+                        <option value="2">Estudiante</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword">Contraseña</label>
+                    <input type="password" class="form-control" id="exampleInputPassword" placeholder="Contraseña">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword2">Confirmar contraseña</label>
+                    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Contraseña">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="/signup" class="">¿Ya tienes cuenta?</a>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary center">Registrarse</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{> scripts}}
