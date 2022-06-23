@@ -13,14 +13,13 @@ for (i = 0; i < acc.length; i++) {
 function openNav() {
   document.getElementById("mySidenav").style.width = "18%";
   document.getElementById("contenido").style.width = "82%";
-  document.getElementById("card").style.width = "82%";
+  
   document.getElementsByClassName('btn-flotante')[0].style.display = 'none';
   
   
 }
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("card").style.width = "100%";
   document.getElementById("contenido").style.width = "100%";
   document.getElementsByClassName('btn-flotante')[0].style.display = 'block';
 }
