@@ -4,53 +4,74 @@
 
 <div class="Container">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
 
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="centrado separado">
                 <img src="/static/img/logo.png" style="width:auto; height:90px;" alt="Imagen no disponible">
             </div>
-            <form class="border-black">
+            <form action="/signup" method="POST" class="border-black">
                 <div class="form-group ">
-                    <label for="exampleInputName">Nombre</label>
-                    <input type="text" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Ingrese su nombre">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" id="nombre" aria-describedby="nameHelp" placeholder="Ingrese su nombre">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputLastName">Apellidos</label>
-                    <input type="text" class="form-control" id="exampleInputLastName" aria-describedby="lastNameHelp" placeholder="Ingrese sus apellidos">
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" class="form-control" name="apellidos" id="apellidos" aria-describedby="lastNameHelp" placeholder="Ingrese sus apellidos">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputName">Correo electrónico</label>
-                    <input type="text" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Ingrese su correo electrónico">
+                    <label for="matricula">Matrícula</label>
+                    <input type="text" class="form-control" name="matricula" id="matricula" aria-describedby="lastNameHelp" placeholder="Ingrese sus apellidos">
                 </div>
                 <div class="form-group">
-                    <label for="exampleFormControlRol">Rol</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="text" class="form-control" name="correo" id="correo" aria-describedby="emailHelp" placeholder="Ingrese su correo electrónico">
+                </div>
+                <div class="form-group">
+                    <label for="rol">Rol</label>
+                    <select class="form-control" name="rol" id="rol">
                         <option value="">Seleccionar</option>
                         <option value="1">Instructor</option>
                         <option value="2">Estudiante</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword">Contraseña</label>
-                    <input type="password" class="form-control" id="exampleInputPassword" placeholder="Contraseña">
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" class="form-control" name="contraseña" id="contraseña" placeholder="Contraseña">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword2">Confirmar contraseña</label>
-                    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Contraseña">
+                    <label for="contraseña2">Confirmar contraseña</label>
+                    <input type="password" class="form-control" name="contraseña2" id="contraseñacontraseña2" placeholder="Contraseña">
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <a href="/signup" class="">¿Ya tienes cuenta?</a>
+                    <div class="col-md-6" align="left">
+                        <a href="/login" class="">¿Ya tienes cuenta?</a>
                     </div>
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary center">Registrarse</button>
+                    <div class="col-md-6" align="right">
+                        <button type="submit" class="btn btn-azul btn-block">Registrarse</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css" rel="stylesheet">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+{{#if alert}}
+    <script>
+        Swal.fire({
+            title: 'Registro de usuario',
+            text: 'El usuario fue registrado de manera exitosa!!',
+            icon: 'success',
+            showConfirmButton: 'false',
+            timer: '2000'
+        }).then(()=>{
+            window.location= '/index'
+        })
+    </script>
+{{/ if}}
 
 {{> scripts}}

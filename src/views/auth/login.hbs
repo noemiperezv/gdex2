@@ -1,2 +1,38 @@
+<h4>{{> header}}</h4>
 
+<hr>
+
+<div class="Container">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <div class="centrado separado">
+                <img src="/static/img/logo.png" style="width:auto; height:90px;" alt="Imagen no disponible">
+            </div>
+            <form class="border-black">
+                <h1 class="centrado">Login</h1>
+                <div class="form-group">
+                    <label for="exampleInputName">Correo electrónico</label>
+                    <input type="text" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Ingrese su correo electrónico">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword">Contraseña</label>
+                    <input type="password" class="form-control" id="exampleInputPassword" placeholder="Contraseña">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="/signup" class="">¿No tienes cuenta?</a>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary center">Iniciar sesión</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{> scripts}}
 

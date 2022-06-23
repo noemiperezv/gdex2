@@ -10,6 +10,8 @@ const indexRoutes = require('./routes/index');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const dotenv = require('dotenv');
+const bcryptsjs = require('bcryptjs');
 
 const app= express();
 
@@ -72,6 +74,31 @@ app.get('/index',(req,res)=>{
 app.use('/signup', signupRoutes);
 
 
+//Método para registrar
+app.post('/signup', async(req,res)=>{
+    const nombre = req.body.nombre;
+    const apellidos = req.body.apellidos;
+    const matricula = req.body.matricula;
+    const correo = req.body.correo;
+    const rol = req.body.rol;
+    const contraseña = req.body.contraseña;
+    const fecha = new Date();
+    let passwordHash = await bcryptsjs.hash(contraseña,8);
+    req.getConnection((err, conn) => {
+        conn.query("Insert into tblusuario (nombre, apellidos, matricula, email, cveRol, password, fechaRegistro) values ( ?" + "'"+nombre+"' , '"+apellidos+"' ,'"+matricula+"' ,'"+
+        correo+"' ,"+rol+", '"+passwordHash+"', '"+fecha+"')",{},
+            async(error, results)=>{
+                if (error){
+                    console.log(error);
+                }else{
+                    res.render('auth/signup',{
+                        alert:true
+                    })
+                }
+            });
+    });
+    
+})
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
 app.use('/static', express.static('src/views/public'));
 
@@ -80,3 +107,10 @@ app.use('/static', express.static('src/views/public'));
 app.get('*', (req, res) => {
     res.render('error/');
 });
+
+//Variable para session
+app.use(session({
+    secret:'secret',
+    resave: true,
+    saveUninitialized: true
+}));

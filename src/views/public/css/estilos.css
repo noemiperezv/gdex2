@@ -44,8 +44,10 @@ button {
 
 .border-black{
     border:gray 2px solid;
-    padding: 10px;
+    padding: 5%;
     border-radius: 20px;
+    margin-left: 10%;
+    margin-right: 10% ;
 }
 
 .centrado{
@@ -55,3 +57,8 @@ button {
 .separado{
     padding-bottom: 3%;
 }
+
+.btn-azul{
+    background: linear-gradient(#4FA0CB, #264C4D);
+}
+
