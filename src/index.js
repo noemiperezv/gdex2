@@ -6,6 +6,8 @@ const mysql = require('mysql');
 const session = require('express-session');
 const loginRoutes = require('./routes/login');
 const indexRoutes = require('./routes/index');
+const inicioRoutes = require('./routes/inicioRoutes');
+const cursoRoutes = require('./routes/cursoRoutes');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -57,12 +59,15 @@ app.use(myconnection(mysql, {
 
 //Ruta login
 app.use('/login', loginRoutes);
+app.use('/inicio', inicioRoutes);
+app.use('/curso', cursoRoutes);
+app.use('/index', indexRoutes);
 
 app.get('/',(req,res)=>{
     res.send("Bienvenidos");
 });
 
-app.use('/index', indexRoutes);
+
 
 app.get('/index',(req,res)=>{
     res.send('/index');
