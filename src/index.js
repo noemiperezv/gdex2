@@ -73,6 +73,30 @@ app.get('/index',(req,res)=>{
     res.send('/index');
 });
 
+//Método para logearse
+app.post('/login', async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    let passwordHash = bcryptsjs.hash(password, 8);
+    if(email && password){
+        req.getConnection((err, conn) => {
+            conn.query("Select * from tblusuario Where email = ?" + "'"+email+"'",{},
+                async(error, results)=>{
+                    if (results.length == 0 || !(await bcryptsjs.compare(password, results[0].password))){
+                        res.render('auth/login',{
+                            error:true
+                        })
+                    }else{
+                        res.render('auth/login',{
+                            alert:true
+                        })
+                    }
+                });
+        });
+    }
+})
+
+
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
 app.use('/static', express.static('src/views/public'));
 
