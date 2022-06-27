@@ -4,8 +4,7 @@ const path = require('path');
 const myconnection = require('express-myconnection');
 const mysql = require('mysql');
 const session = require('express-session');
-const loginRoutes = require('./routes/login');
-const indexRoutes = require('./routes/index');
+const loginRoutes = require('./routes/loginRoutes');
 const inicioRoutes = require('./routes/inicioRoutes');
 const cursoRoutes = require('./routes/cursoRoutes');
 const { engine } = require('express-handlebars');
@@ -53,48 +52,29 @@ app.use(myconnection(mysql, {
     port: '3309',
     database: 'gdex'
 }));
-
+//Uso de sesiones
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 60000,
+        sameSite: false,
+        path: '/',
+        secure: false,
+        httpOnly: true,
+    }
+}));
 
 //routes
 
 //Ruta login
-app.use('/login', loginRoutes);
+app.use('/', loginRoutes);
 app.use('/inicio', inicioRoutes);
 app.use('/curso', cursoRoutes);
-app.use('/index', indexRoutes);
-
-app.get('/',(req,res)=>{
-    res.send("Bienvenidos");
-});
 
 
 
-app.get('/index',(req,res)=>{
-    res.send('/index');
-});
-
-//Método para logearse
-app.post('/login', async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    let passwordHash = bcryptsjs.hash(password, 8);
-    if(email && password){
-        req.getConnection((err, conn) => {
-            conn.query("Select * from tblusuario Where email = ?" + "'"+email+"'",{},
-                async(error, results)=>{
-                    if (results.length == 0 || !(await bcryptsjs.compare(password, results[0].password))){
-                        res.render('auth/login',{
-                            error:true
-                        })
-                    }else{
-                        res.render('auth/login',{
-                            alert:true
-                        })
-                    }
-                });
-        });
-    }
-})
 
 
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.

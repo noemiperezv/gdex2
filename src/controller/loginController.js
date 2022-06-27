@@ -1,22 +1,113 @@
 
+const { hash } = require('bcrypt');
+const bcrypt = require('bcrypt');
+
+
+
 function login(req, res) {
-    
-    res.render("index")
+    if (req.session.loggedin != true) {
+        res.render('auth/index');
+    } else {
+        res.redirect('/inicio');
+    }
 
 }
-function consulta(req, res) {
+
+function registrar(req, res) {
+    if (req.session.loggedin != true) {
+        res.render('auth/registrar');
+    } else {
+        res.redirect('/inicio');
+    }
+}
+
+
+//Método para logearse
+function auth(req, res) {
+    const data = req.body;
     req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM usuario WHERE email = ?', ['ramirot629@gmail.com'], (err, userdata) => {
-            if(err){
-                res.render(err)
-            }else{
-                res.send(userdata)
+        conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
+            if (userdata.length > 0) {
+                userdata.forEach(element => {
+                    bcrypt.compare(data.password, element.password, (err, isMatch) => {
+                        if (!isMatch) {
+                            res.render('auth/index', { error: 'Error: Contraseña incorrecta...!!!' });
+                        } else {
+                            req.session.loggedin = true;
+                            req.session.cveUsuario = element.cveUsuario;
+                            req.session.nombre = element.nombre;
+                            req.session.apellidos = element.apellidos;
+                            req.session.matricula = element.matricula;
+                            req.session.email = element.email;
+                            req.session.fechaRegistro = element.fechaRegistro;
+                            req.session.cveRol = element.cveRol;
+                            res.redirect('/inicio');
+
+                        }
+                    });
+                });
+            } else {
+                res.render('auth/index', { error: 'Error: Usuario no existe...!!!' });
             }
-   
         });
     });
 }
+
+function logout(req, res) {
+    if (req.session.loggedin == true) {
+        req.session.destroy();
+
+    }
+    res.redirect('/');
+}
+
+function regUser(req, res) {
+    const data = req.body;
+    req.getConnection((err, conn) => {
+        conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
+
+            if (userdata.length > 0) {
+                res.render('auth/registrar', { error: 'Error: El usuario ya existe...!!!' });
+            } else {
+                if (data.password === data.confirmarpassword) {
+                    bcrypt.hash(data.password, 12).then(hash => {
+                        data.password = hash;
+
+                        req.getConnection((err, conn) => {
+                            conn.query(`INSERT INTO tblusuario (nombre, apellidos, matricula, email, password, fechaRegistro, cveRol) values ('${data.name}', '${data.lastname}', '${data.matricula}', '${data.email}', '${data.password}', CURDATE() , '${data.rol}')`, (err2, rows) => {
+                               
+                                conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, emails) => {
+
+                                    req.session.loggedin = true;
+                                    emails.forEach(datos => {
+                                        req.session.cveUsuario = datos.cveUsuario;
+                                        req.session.nombre = datos.nombre;
+                                        req.session.apellidos = datos.apellidos;
+                                        req.session.matricula = datos.matricula;
+                                        req.session.email = datos.email;
+                                        req.session.fechaRegistro = datos.fechaRegistro;
+                                        req.session.cveRol = datos.cveRol;
+
+                                    });
+
+                                    res.redirect('/inicio');
+                                });
+                            });
+                        });
+                    });
+                } else {
+                    res.render('auth/registrar', { error: 'Error: Contraseñas no coinciden...!!!' });
+                }
+
+            }
+        });
+    });
+}
+
 module.exports = {
     login,
-    consulta
+    registrar,
+    logout,
+    regUser,
+    auth
 }

@@ -690,3 +690,13 @@ td {
     width: 0px;
   }
 }
+
+/*editCurso*/
+.cursos_links_editar:hover {
+  color: blue;
+}
+
+.cursos_links_eliminar:hover {
+  color: blue;
+
+}
