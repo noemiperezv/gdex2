@@ -30,7 +30,8 @@ app.engine('.hbs', engine({
     extname: '.hbs',
     defaultLayout: 'main', 
     layoutsDir: __dirname + '/views/layouts/',
-    partialsDir: __dirname + '/views/partials/'
+    partialsDir: __dirname + '/views/partials/',
+    helpers: require('./config/handlebars-helpers') //only need this
 }));
 app.set('view engine', 'hbs');
 
@@ -39,6 +40,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
 
 
 //morgan sera usado para ver todas las peticiones que se hagan al servidor

@@ -2,6 +2,7 @@
 const { hash } = require('bcrypt');
 const bcrypt = require('bcrypt');
 
+const { validationResult } = require('express-validator');
 
 
 function login(req, res) {
@@ -25,32 +26,41 @@ function registrar(req, res) {
 //Método para logearse
 function auth(req, res) {
     const data = req.body;
-    req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
-            if (userdata.length > 0) {
-                userdata.forEach(element => {
-                    bcrypt.compare(data.password, element.password, (err, isMatch) => {
-                        if (!isMatch) {
-                            res.render('auth/index', { error: 'Error: Contraseña incorrecta...!!!' });
-                        } else {
-                            req.session.loggedin = true;
-                            req.session.cveUsuario = element.cveUsuario;
-                            req.session.nombre = element.nombre;
-                            req.session.apellidos = element.apellidos;
-                            req.session.matricula = element.matricula;
-                            req.session.email = element.email;
-                            req.session.fechaRegistro = element.fechaRegistro;
-                            req.session.cveRol = element.cveRol;
-                            res.redirect('/inicio');
+    const errors = validationResult(req);
+    console.log(errors)
+    if (!errors.isEmpty()) {
+        const validaciones = errors.array();
+        res.render('auth/index', { validaciones: validaciones, valores: data });
+        //return res.status(422).json({ errors: errors.array() });
+    }
+    else {
+        req.getConnection((err, conn) => {
+            conn.query('SELECT cveUsuario, nombre, apellidos, matricula, email, password, fechaRegistro, cveRol FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
+                if (userdata.length > 0) {
+                    userdata.forEach(element => {
+                        bcrypt.compare(data.password, element.password, (err, isMatch) => {
+                            if (!isMatch) {
+                                res.render('auth/index', { error: 'Error: Contraseña incorrecta...!!!' , valores: data } );
+                            } else {
+                                req.session.loggedin = true;
+                                req.session.cveUsuario = element.cveUsuario;
+                                req.session.nombre = element.nombre;
+                                req.session.apellidos = element.apellidos;
+                                req.session.matricula = element.matricula;
+                                req.session.email = element.email;
+                                req.session.fechaRegistro = element.fechaRegistro;
+                                req.session.cveRol = element.cveRol;
+                                res.redirect('/inicio');
 
-                        }
+                            }
+                        });
                     });
-                });
-            } else {
-                res.render('auth/index', { error: 'Error: Usuario no existe...!!!' });
-            }
+                } else {
+                    res.render('auth/index', { validaciones: errors, valores: data, error: 'Error: Usuario no existe...!!!' });
+                }
+            });
         });
-    });
+    }
 }
 
 function logout(req, res) {
@@ -63,8 +73,17 @@ function logout(req, res) {
 
 function regUser(req, res) {
     const data = req.body;
+    const errors = validationResult(req);
+    console.log(errors)
+    if (!errors.isEmpty()) {
+        const validaciones = errors.array();
+        res.render('auth/registrar', { validaciones: validaciones, valores: data });
+        //return res.status(422).json({ errors: errors.array() });
+    }
+    else {
+    
     req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
+        conn.query('SELECT nombre FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
 
             if (userdata.length > 0) {
                 res.render('auth/registrar', { error: 'Error: El usuario ya existe...!!!' });
@@ -75,8 +94,8 @@ function regUser(req, res) {
 
                         req.getConnection((err, conn) => {
                             conn.query(`INSERT INTO tblusuario (nombre, apellidos, matricula, email, password, fechaRegistro, cveRol) values ('${data.name}', '${data.lastname}', '${data.matricula}', '${data.email}', '${data.password}', CURDATE() , '${data.rol}')`, (err2, rows) => {
-                               
-                                conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, emails) => {
+
+                                conn.query('SELECT cveUsuario, nombre, apellidos, matricula, email, password, fechaRegistro, cveRol FROM tblusuario WHERE email = ?', [data.email], (err, emails) => {
 
                                     req.session.loggedin = true;
                                     emails.forEach(datos => {
@@ -96,12 +115,13 @@ function regUser(req, res) {
                         });
                     });
                 } else {
-                    res.render('auth/registrar', { error: 'Error: Contraseñas no coinciden...!!!' });
+                    res.render('auth/registrar', { error: 'Error: Contraseñas no coinciden...!!!',valores: data });
                 }
 
             }
         });
     });
+}
 }
 
 module.exports = {

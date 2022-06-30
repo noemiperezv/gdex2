@@ -4,7 +4,7 @@ function inicio(req, res) {
             if(err){
                 res.render(err)
             }else{
-                res.render("inicio/index", {cursos: cursosdata})
+                res.render("inicio/index", {cursos: cursosdata, datos: req.session})
             }
    
         });
