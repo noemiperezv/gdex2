@@ -1,43 +1,702 @@
-body {
-    background: rgb(27, 74, 118);
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    font-family: 'Open Sans', sans-serif;
-}
 
-.img2 {
-    margin-top: 30px;
-    margin-left: 90px;
-    width: 250px;
-    height: 350px;
-}
-
-.container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
+/****/
 h1 {
-    color: rgb(233, 238, 245);
-    font-size: 20px;
-    padding: 20px;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
-button {
-    padding: 13px 30px;
-    border-radius: 15px;
-    border: none;
-    background: rgb(5, 129, 245);
-    color: white;
+.centrar {
+  text-align: center;
 }
 
-@media screen and (max-width:630px) {
-    h1 {
-        font-size: 16px;
-    }
+.derecha {
+  text-align: right;
+  margin-right: 5%;
+}
+
+.form {
+  width: 380px;
+  padding: 16px;
+  border-radius: 10px;
+  margin: auto;
+  background-color: #ccc;
+}
+
+.formCrearCurso {
+  display: grid;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.btnsCrearCurso {
+  margin: 10px 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mainContent {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.intputForm {
+  max-width: 100%;
+}
+
+.textareaForm {
+  max-width: 100%;
+  max-height: 90%;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+
+  box-sizing: border-box;
+  scroll-snap-type: y mandatory;
+}
+
+body {
+  margin: 0;
+  margin-bottom: 40px;
+}
+
+p {
+  text-align: justify;
+}
+
+#card {
+  background-color: black;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  color: white;
+
+}
+
+/*Datos del curso*/
+
+.contenedor {
+  max-width: 80%;
+
+  font-size: 100%;
+  /*
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: 0;
+    margin-left: auto; 
+    */
+  /* 
+    margin: 0 auto 0 auto;
+    */
+  margin: 15px auto;
+}
+
+@media (max-width: 960px) {
+  .contenedor {
+    max-width: 100%;
+  }
+}
+
+.sombra {
+  -webkit-box-shadow: -17px 17px 29px -5px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: -17px 17px 29px -5px rgba(0, 0, 0, 0.6);
+  box-shadow: -17px 17px 29px -5px rgba(0, 0, 0, 0.6);
+  padding: 1rem;
+  background-color: var(--blanco);
+  border-radius: 1rem;
+}
+
+
+
+.imgCurso {
+  max-width: 95%;
+  height: 200px;
+  border-radius: 10px;
+
+
+}
+
+.descripcion {
+  text-align: center;
+}
+
+.separacion {
+  display: none;
+
+}
+
+@media(max-width:960px) {
+  .separacion {
+    display: block;
+
+  }
+}
+
+@media (min-width: 960px) {
+  .descripcion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .imgCurso {
+    height: 400px;
+    width: 400px;
+  }
+
+}
+
+.parrafo {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: justify;
+}
+
+.gridDatosCurso {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+}
+
+.seccionesCurso {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.frame {
+  border: 1px solid black;
+
+  margin-left: 10%;
+  margin-right: 10%;
+  justify-content: center;
+
+}
+
+/*div desplegables*/
+button.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+button.accordion.active,
+button.accordion:hover {
+  background-color: #ddd;
+}
+
+button.accordion:after {
+  content: '\02795';
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+button.accordion.active:after {
+  content: "\2796";
+}
+
+div.panel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.6s ease-in-out;
+  opacity: 0;
+  text-align: right;
+}
+
+div.panel.show {
+  opacity: 1;
+  max-height: 500px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+/*Menu side bar*/
+/* The side navigation menu */
+.sidenav {
+  height: 100%;
+  /* 100% Full-height */
+  width: 0;
+  /* 0 width - change this with JavaScript */
+  position: fixed;
+  /* Stay in place */
+  top: 1;
+  bottom: 1;
+  background-color: #111;
+  /* Black*/
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+  padding-top: 60px;
+  /* Place content 60px from the top */
+  transition: 0.5s;
+  /* 0.5 second transition effect to slide in the sidenav */
+
+}
+
+.itemsSecciones {
+  margin-top: .5rem;
+  margin-bottom: 6rem;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #818181;
+  display: block;
+  transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover,
+.offcanvas a:focus {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+main{
+  margin-bottom: 10%;
+}
+.sidenav {
+  right: 0;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+.sidenav {
+  right: 0;
+}
+
+#contenido {
+  transition: margin-left .4s;
+  padding: 1rem;
+}
+
+
+
+/*Boton flotante*/
+
+.btn-flotante {
+  font-size: 25px;
+  /* Cambiar el tamaño de la tipografia */
+
+  font-weight: bold;
+  /* Fuente en negrita o bold */
+  color: #000000;
+  /* Color del texto */
+  border-radius: 5px;
+  /* Borde del boton */
+  background: rgba(63, 26, 183, 0.3);
+
+  padding: 12px 24px;
+  /* Relleno del boton */
+  position: fixed;
+  top: 90px;
+  right: 40px;
+  transition: all 300ms ease 0ms;
+
+  z-index: 99;
+  opacity: 70%;
+}
+
+
+
+.btn-flotante:hover {
+  background-color: #2c2fa5;
+  /* Color de fondo al pasar el cursor */
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(-7px);
+  text-decoration: none;
+}
+
+
+
+/*Reproductor de video*/
+
+.videoPlayer {
+
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.controles {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+/*comentarios*/
+.line {
+  width: 100%;
+  height: 2px;
+  border-style: none;
+  background: #cecece;
+  margin-top: 20px;
+}
+
+.container-comments,
+.container-comments-request {
+  margin-top: 20px;
+}
+
+.container-comments-request {
+  margin-left: 100px;
+}
+
+.comments,
+.comments-request {
+  display: flex;
+}
+
+
+.photo-perfil {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+
+
+.photo-perfil-request img {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-perfil img {
+  width: 100%;
+  height: 100%;
+}
+
+
+.info-comments,
+.info-comments-request {
+  margin-left: 20px;
+  background: #e6e6e6;
+  transition: all 300ms;
+  margin-top: 10px;
+  border-bottom: 6px solid black;
+}
+
+
+.info-comments .headerComentario,
+.info-comments-request .headerComentario {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #019CDE;
+  color: white;
+
+}
+
+.info-comments p,
+.info-comments-request p {
+  padding: 20px;
+}
+
+.info-comments .respuestaArea,
+.info-comments-request .respuestaArea {
+  width: 100%;
+  background: white;
+  padding: 10px;
+  color: #5f5f5f;
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-comments .respuestaArea h5,
+.info-comments-request .respuestaArea h5 {
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.info-comments .icon-heart,
+.info-comments-request .icon-heart {
+  color: #aaaaaa;
+  transition: all 300ms;
+  font-size: 20px;
+}
+
+.info-comments .icon-heart:hover,
+.info-comments-request .icon-heart:hover {
+  color: #d91111;
+  cursor: pointer;
+}
+
+
+
+/*Contenedor para los datos de comentarios*/
+
+
+.container-data {
+  width: 100%;
+  bottom: 0px;
+  position: fixed;
+  background: white;
+  padding: 20px;
+  padding-bottom: 80px;
+  z-index: 11;
+  border-top: 6px solid #019CDE;
+}
+
+
+.perfil-photo {
+  width: 100px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.perfil-photo img {
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.inputRespuesta {
+
+  width: 100%;
+}
+
+
+
+
+
+
+
+/*Modal*/
+/* The Modal (background) */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  /* Could be more or less, depending on screen size */
+}
+
+.modalComentario {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btnsModal {
+  display: flex;
+  justify-content: center;
+  gap: 70%;
+}
+
+/*Editar curso*/
+.marco {
+  border: 1px solid black;
+  
+}
+
+.crearCursoForms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 15px;
+}
+
+@media (max-width: 980px) {
+  .crearCursoForms {
+    grid-template-columns: 1fr;
+
+  }
+}
+
+.TablaSecciones {
+  width: 100%;
+  margin-bottom: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.addTemaSeccion {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+}
+
+
+/**/
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+
+
+th,
+td {
+  border: 1px solid;
+  padding: 0.5em;
+  text-align: left;
+  vertical-align: top;
+  font-weight: normal;
+}
+
+.scrollable thead,
+.scrollable tfoot,
+.scrollable tbody,
+.scrollable th,
+.scrollable td {
+
+  display: block;
+  width: 100%;
+}
+
+
+
+.scrollable tfoot,
+.scrollable thead,
+.scrollable tbody {
+  
+  overflow-y: scroll;
+}
+
+
+.scrollable thead::-webkit-scrollbar,
+.scrollable tfoot::-webkit-scrollbar {
+  visibility: hidden;
+}
+
+.scrollable tbody {
+  
+  max-height: 20em;
+  position: relative;
+ }
+
+.scrollable tr {
+  display: flex;
+}
+
+.scrollable tbody th,
+.scrollable tbody td {
+  border-top: none;
+}
+
+
+
+/*editarTema*/
+.marLate {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 15px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.areaTeoria {
+  width: 90%;
+}
+
+@media (max-width: 960px) {
+  .btn-flotante {
+   display: none !important;
+   background-color: #019CDE;
+    
+  }
+
+  .sidenav {
+    width: 0px;
+  }
+}
+
+/*editCurso*/
+.cursos_links_editar:hover {
+  color: blue;
+}
+
+.cursos_links_eliminar:hover {
+  color: blue;
+
 }
