@@ -6,8 +6,5 @@ module.exports = {
         return options.fn(this);
         }
       return options.inverse(this);
-    },
-    bar: function(){
-      return "BAR!";
     }
   }
