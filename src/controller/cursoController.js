@@ -34,13 +34,8 @@ function misCursos(req, res) {
 
 function upload(req, res) {
     var nombreImagen = "";
-    const helperImage = (filePath, fileName, size = 300) => {
-        return sharp(filePath)
-        .resize(size)
-        .toFile(`./src/views/public/optimize/${fileName}.png`)
-     }
+    
      if(req.file != null || require.file != undefined) {
-        helperImage(req.file.path,`resize-${req.file.filename}`, 100)
         nombreImagen = req.file.filename;
      }
     
