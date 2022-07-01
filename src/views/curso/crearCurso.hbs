@@ -6,25 +6,47 @@
             <div class="formCrearCurso">
                 <div class="form-group">
                     <label for="name">Nombre curso:</label>
-                    <input class="form-control" type="text" id="nameCurso" name="nameCurso" required>
+                    <input class="form-control black" type="text" id="nameCurso" name="nameCurso" required>
                 </div>
                 <div class="form-group">
                     <label for="image">Imagen curso:</label>
-                    <input class="form-control" type="file" id="imagen" name="imagen" >
+                    <input class="form-control black" type="file" accept="image/png,image/jpeg,image/gif,image/ico,image/icoa,image/jpg" id="imagen" name="imagen" >
                 </div>
                 <div class="form-group">
                     <label for="descripcion">Descripción:</label>
-                    <textarea class="form-control" class="textareaForm" id="descripcion" name="descripcion" cols="30" rows="10"></textarea>
+                    <textarea class="form-control black" id="descripcion" name="descripcion" cols="30" rows="10"></textarea>
                 </div>
             </div>
             </div>            
             <div class="btnsCrearCurso">
-                <input class="btn btn-primary" type="button" name="btnCancelar" id="btnCancelar" value="Cancelar">
-                <input class="btn btn-primary" type="submit" name="btnCrearCurso" id="btnCrearCurso" value="Crear">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input class="btn btn-danger btn-block" type="button" name="btnCancelar" id="btnCancelar" value="Cancelar">
+                        </div>
+                        <div class="col-md-6">
+                            <input class="btn btn-primary btn-block" type="submit" name="btnCrearCurso" id="btnCrearCurso" value="Crear">
+                        </div>
+                    </div>
+                </div> 
             </div>
         </form>
     </main>
+     {{> scripts}}
 
+    {{#if alert }}
+        <script>
+            Swal.fire({
+                title: "Curso creado de exitosamente!",
+                icon:"success",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+                window.location = "/inicio";
+            });
+        </script>
+    {{/if}}
+    
     
 
     

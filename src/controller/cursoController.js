@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const sharp = require('sharp');
 const app= express();
+const Swal = require('sweetalert2')
 
 
 app.use(cors());
@@ -32,23 +33,26 @@ function misCursos(req, res) {
 }
 
 function upload(req, res) {
+    var nombreImagen = "";
     const helperImage = (filePath, fileName, size = 300) => {
         return sharp(filePath)
         .resize(size)
         .toFile(`./src/views/public/optimize/${fileName}.png`)
      }
-    helperImage(req.file.path,`resize-${req.file.filename}`, 100)
+     if(req.file != null || require.file != undefined) {
+        helperImage(req.file.path,`resize-${req.file.filename}`, 100)
+        nombreImagen = req.file.filename;
+     }
     
     req.getConnection((err, conn) => {
-        conn.query(`INSERT INTO tblcurso (nombre, descripcion, estatus, fechaRegistro, cantidadUsuarios, rutaImagen,cveUsuario) values ('
-        ${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${req.file.filename}',${req.session.cveUsuario} )`, (err2, rows) => {
+        conn.query(`INSERT INTO tblcurso (nombre, descripcion, estatus, fechaRegistro, cantidadUsuarios, rutaImagen,cveUsuario) 
+        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',${req.session.cveUsuario} )`, (err2, rows) => {
             usuario = req.session.cveUsuario;
                 console.log(usuario);
-                res.redirect('/inicio/misCursos');
+                res.render('curso/crearCurso',{alert:true});
 
         });
     });
-    //res.send(req.body.nameCurso);
     console.log(req.session.cveUsuario);
 }
 
