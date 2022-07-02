@@ -11,6 +11,7 @@ const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
+
 const app= express();
 
 //Configuración 
@@ -51,7 +52,7 @@ app.use(myconnection(mysql, {
     host: 'localhost',
     user: 'root',
     password: '',
-    port: '3309',
+    port: '3306',
     database: 'gdex'
 }));
 //Uso de sesiones
@@ -74,11 +75,6 @@ app.use(session({
 app.use('/', loginRoutes);
 app.use('/inicio', inicioRoutes);
 app.use('/curso', cursoRoutes);
-
-
-
-
-
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
 app.use('/static', express.static('src/views/public'));
 
