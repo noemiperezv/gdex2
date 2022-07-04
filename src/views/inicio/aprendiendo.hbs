@@ -1,45 +1,147 @@
-  {{> navbar }}
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol}}
 
+<br>
 
-<div class="card-columns">
-  {{#each aprendiendo}}
-  <div class="card">
-    <img class="card-img-top" src="/static/img/logo.png" style="width:auto; height:150px;" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title"><p>{{nombre}}</p></h5>    
+{{> search oCursos = aprendiendo}}
 
-        {{#if avanceCurso }}
-        <div class="progress">
-        <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: {{avanceCurso}}%" aria-valuenow="{{avanceCurso}}" aria-valuemin="0" aria-valuemax="100">{{avanceCurso}}%</div>
+<section style="padding:50px;">
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+        aria-controls="nav-home" aria-selected="true">En progreso</a>
+      <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+        aria-controls="nav-profile" aria-selected="false">Terminados</a>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+      {{#ifgt aprendiendo 0}}
+
+      <div class="card-columns">
+
+        {{#each aprendiendo}}
+        <div class="card">
+
+          <div align="center">
+            <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
+          </div>
+
+          <div class="card-body">
+            <h5 class="card-title">
+              <p>{{nombre}}</p>
+            </h5>
+
+            {{#if avanceCurso }}
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar"
+                style="width: {{avanceCurso}}%" aria-valuenow="{{avanceCurso}}" aria-valuemin="0" aria-valuemax="100">
+                {{avanceCurso}}%</div>
+            </div>
+            {{else}}
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="0">0%</div>
+            </div>
+            {{/if}}
+
+            <br>
+
+            <details>
+              <summary>Más información</summary>
+              <p>{{descripcion}}</p>
+            </details>
+
+            <br>
+            <br>
+
+            <p class="card-text" style="float: left;">
+              <i class="icon-calendar"></i>&nbsp;&nbsp;{{fecha}}
+            </p>
+            <p class="card-text" style="float: right;">
+              <i class="icon-user"></i>&nbsp;&nbsp;{{nombreCompleto}}
+            </p>
+          </div>
         </div>
-        {{else}}
-        <div class="progress">
-        <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0">0%</div>
+        {{/each}}
+
+      </div>
+      {{else}}
+
+      <div align="center">
+        <img src="/static/img/sin-cursos.png" style="width: 250px; height: auto;" alt="No hay cursos">
+        <br><br>
+        <h5>Aún no hay cursos en proceso</h5>
+      </div>
+
+      {{/ifgt}}
+
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+      {{#ifgt terminados 0}}
+      <div class="card-columns">
+
+        {{#each terminados}}
+        <div class="card">
+
+          <div align="center">
+            <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
+          </div>
+
+          <div class="card-body">
+            <h5 class="card-title">
+              <p>{{nombre}}</p>
+            </h5>
+
+            {{#if avanceCurso }}
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar"
+                style="width: {{avanceCurso}}%" aria-valuenow="{{avanceCurso}}" aria-valuemin="0" aria-valuemax="100">
+                {{avanceCurso}}%</div>
+            </div>
+            {{else}}
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="0">0%</div>
+            </div>
+            {{/if}}
+
+            <br>
+
+            <details>
+              <summary>Más información</summary>
+              <p>{{descripcion}}</p>
+            </details>
+
+            <br>
+            <br>
+
+            <p class="card-text" style="float: left;">
+              <i class="icon-calendar"></i>&nbsp;&nbsp;{{fecha}}
+            </p>
+            <p class="card-text" style="float: right;">
+              <i class="icon-user"></i>&nbsp;&nbsp;{{nombreCompleto}}
+            </p>
+          </div>
         </div>
-        {{/if}}
+        {{/each}}
 
-        <br>
-        
-      <details>
-        <summary>Más información</summary>
-        <p>{{descripcion}}</p>
-      </details>
+      </div>
+      {{else}}
 
-      <br>
-      <br>
+      <div align="center">
+        <img src="/static/img/sin-cursos.png" style="width: 250px; height: auto;" alt="No hay cursos">
+        <br><br>
+        <h5>Aún no hay cursos terminados</h5>
+      </div>
 
-      <p class="card-text" style="float: left;">
-        <i class="icon-calendar"></i>&nbsp;&nbsp;{{fecha}}
-      </p>
-      <p class="card-text" style="float: right;">
-        <i class="icon-user"></i>&nbsp;&nbsp;{{nombreCompleto}}
-      </p> 
+      {{/ifgt}}
+
     </div>
   </div>
-  {{/each}}
-  
-</div>
 
 
-
-
+</section>

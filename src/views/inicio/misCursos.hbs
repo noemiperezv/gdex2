@@ -1,0 +1,67 @@
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol}}
+
+<br>
+
+{{> search oCursos = miscursos}}
+
+<section style="padding:50px;">
+  <h4>Tus cursos creados</h4>
+  <hr>
+  {{#ifgt miscursos 0}}
+  <div class="card-columns">
+    {{#each miscursos}}
+    <div class="card">
+
+      <div align="center">
+        <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title">
+          <p>{{nombre}}</p>
+        </h5>
+        <details>
+          <summary>Más información</summary>
+          <p>{{descripcion}}</p>
+        </details>
+
+        <br>
+        <br>
+
+        <p class="card-text" style="float: left;">
+          <i class="icon-calendar"></i>&nbsp;&nbsp;{{fecha}}
+        </p>
+        <br>
+        <br>
+
+        <div align="center">
+          <ul style="display:block;">
+            <a class="cursos_links_editar" href="#" style="text-decoration: none;">
+              <i class="icon-edit" style="font-size: 35px; color: rgb(255, 223, 43);"></i>
+              <!--Editar curso-->
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="cursos_links_eliminar" href="#" style="text-decoration: none;">
+              <i class="icon-trash" style="font-size: 35px; color: rgb(219, 68, 68);"></i>
+              <!--Eliminar curso-->
+            </a>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    {{/each}}
+
+  </div>
+
+  {{else}}
+
+  <div align="center">
+    <img src="/static/img/sin-cursos.png" style="width: 250px; height: auto;" alt="No hay cursos">
+    <br><br>
+    <h5>Aún no hay cursos creados</h5>
+  </div>
+
+  {{/ifgt}}
+
+</section>

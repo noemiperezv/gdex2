@@ -1,0 +1,126 @@
+<div align="left" style="padding-left:50px;">
+    <form class="form-inline my-2 my-lg-0">
+        <input id="buscador" class="form-control mr-sm-2" type="text" placeholder="Ingresar búsqueda..."
+            aria-label="Search">
+        <button id="btnBuscar" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+    </form>
+</div>
+<br>
+
+<section style="padding:50px;" id="seccionResultado">
+    <h4>Resultados de búsqueda</h4>
+    <hr>
+    <div id="resultado" class="card-columns">
+        <!--Aquí se despliegan los resultados-->
+    </div>
+</section>
+
+
+
+<script>
+    const buscador = document.getElementById('buscador');
+    const boton = document.getElementById('btnBuscar');
+    const resultado = document.getElementById('resultado');
+
+    /*const cursos = [{ nombre: 'Pollo' },
+    { nombre: 'Pera' },
+    { nombre: 'Jamon' },
+    { nombre: 'Galleta' },
+    { nombre: 'Leche' },
+    { nombre: 'Choco' },
+    ];*/
+
+    /*const cursos = [];
+    const array = {{oCursos}}
+    array.forEach((curso) => {
+    cursos += {nombre: curso.nombre}
+    });*/
+    let cursos = [];
+    {{#each oCursos }}
+    //cursos += {nombre: '{{nombre}}'.toString() },
+    cursos.push({ nombre: '{{nombre}}'.toString(), descripcion: '{{descripcion}}'.toString(), fecha: '{{fecha}}'.toString(), nombreCompleto: '{{nombreCompleto}}'.toString() });
+    {{/each}}
+
+            console.log(cursos);
+            //console.log(buscador.value);
+
+
+            const filtrar = () => {
+                //console.log(buscador.value);
+                resultado.innerHTML = '';
+                const txtBusqueda = buscador.value.toLowerCase();
+
+                if(txtBusqueda !== ''){
+
+                
+                for (let curso of cursos) {
+                    let nombreCurso = curso.nombre.toLowerCase();
+                    if (nombreCurso.indexOf(txtBusqueda) !== -1) {
+                        /*resultado.innerHTML += `
+                        <li>${curso.nombre}</li>
+                        `*/
+                        resultado.innerHTML += `
+                            <div class="card">
+                                <div align="center">
+                                    <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                    <p>${curso.nombre}</p>
+                                    </h5>
+                                    <details>
+                                    <summary>Más información</summary>
+                                    <p>${curso.descripcion}</p>
+                                    </details>
+
+                                    <br>
+                                    <br>
+
+                                    <p class="card-text" style="float: left;">
+                                    <i class="icon-calendar"></i>&nbsp;&nbsp;${curso.fecha}
+                                    </p>
+                                    <p class="card-text" style="float: right;">
+                                    <i class="icon-user"></i>&nbsp;&nbsp;${curso.nombreCompleto}
+                                    </p>
+                                </div>
+                            </div>
+                            `
+                    }
+                }
+
+                } else {
+                    $('#seccionResultado').hide();
+                }
+
+                if (resultado.innerHTML === '') {
+                    /*resultado.innerHTML += `
+                    <li>Curso no encontrado.</li>
+                    `*/
+                    resultado.innerHTML += `
+                                        <div align="center">
+                                            <img src="/static/img/no-hay-resultados.png" style="width: 150px; height: auto;" alt="No hay cursos">
+                                            <br><br>
+                                            <h5>No se encontraron coincidencias</h5>
+                                        </div>
+                                        `
+                }
+            }
+
+            //boton.addEventListener('click', filtrar());
+            //buscador.addEventListener('keyup', filtrar());
+
+            boton.addEventListener('click', () => {
+                $('#seccionResultado').show();
+                console.log(buscador.value.toLowerCase());
+                filtrar();
+            });
+
+            buscador.addEventListener('keyup', () => {
+                $('#seccionResultado').show();
+                console.log(buscador.value.toLowerCase());
+                filtrar();
+            });
+
+            filtrar();
+
+</script>

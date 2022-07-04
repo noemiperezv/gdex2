@@ -8,7 +8,7 @@ router.post('/auth', LoginController.auth);
 //post
 router.post('/register', LoginController.regUser);
 //Put
-
+router.get('/logout', LoginController.logout);
 //Delete
 module.exports = router;
 

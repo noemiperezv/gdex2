@@ -31,7 +31,7 @@ function auth(req, res) {
                 userdata.forEach(element => {
                     bcrypt.compare(data.password, element.password, (err, isMatch) => {
                         if (!isMatch) {
-                            res.render('auth/index', { error: 'Error: Contraseña incorrecta...!!!' });
+                            res.render('auth/index', { error: 'Error: Contraseña incorrecta.' });
                         } else {
                             req.session.loggedin = true;
                             req.session.cveUsuario = element.cveUsuario;
@@ -41,13 +41,14 @@ function auth(req, res) {
                             req.session.email = element.email;
                             req.session.fechaRegistro = element.fechaRegistro;
                             req.session.cveRol = element.cveRol;
+
                             res.redirect('/inicio');
 
                         }
                     });
                 });
             } else {
-                res.render('auth/index', { error: 'Error: Usuario no existe...!!!' });
+                res.render('auth/index', { error: 'Error: Usuario no existe.' });
             }
         });
     });
@@ -67,7 +68,7 @@ function regUser(req, res) {
         conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, userdata) => {
 
             if (userdata.length > 0) {
-                res.render('auth/registrar', { error: 'Error: El usuario ya existe...!!!' });
+                res.render('auth/registrar', { error: 'Error: El usuario ya existe.' });
             } else {
                 if (data.password === data.confirmarpassword) {
                     bcrypt.hash(data.password, 12).then(hash => {
@@ -75,7 +76,7 @@ function regUser(req, res) {
 
                         req.getConnection((err, conn) => {
                             conn.query(`INSERT INTO tblusuario (nombre, apellidos, matricula, email, password, fechaRegistro, cveRol) values ('${data.name}', '${data.lastname}', '${data.matricula}', '${data.email}', '${data.password}', CURDATE() , '${data.rol}')`, (err2, rows) => {
-                               
+
                                 conn.query('SELECT * FROM tblusuario WHERE email = ?', [data.email], (err, emails) => {
 
                                     req.session.loggedin = true;
@@ -96,7 +97,7 @@ function regUser(req, res) {
                         });
                     });
                 } else {
-                    res.render('auth/registrar', { error: 'Error: Contraseñas no coinciden...!!!' });
+                    res.render('auth/registrar', { error: 'Error: Contraseñas no coinciden.' });
                 }
 
             }

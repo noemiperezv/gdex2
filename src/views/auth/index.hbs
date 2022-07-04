@@ -7,6 +7,16 @@
     id="Datos">
 
     <h1 class="text-3xl  font-bold text-center">Login</h1>
+    <br>
+    {{#if error}}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{error}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {{/if}}
+
     <form action="/auth" method="POST" class="mt-4">
 
         <input type="email" name="email" placeholder="Email"
@@ -20,10 +30,6 @@
         <!-- Se cambio el siguente boton -->
         <button onmouseover="pintar('#0f0')" onmouseout="pintar('#FFFFFF')" type="submit"
             class="rounded-md bg-blue-400 w-full text-lg text-white font-semibold p-2 my-3 hover:bg-blue-600 focus:bg-blue-700">Iniciar</button>
-
-        {{#if error}}
-        <p class="text-red-500 font-bold text-lg my-3">{{error}}</p>
-        {{/if}}
 
     </form>
     <div style="display: flex; justify-content: space-between;">
