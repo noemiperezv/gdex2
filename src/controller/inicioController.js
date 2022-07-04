@@ -52,7 +52,7 @@ function seguirCurso(req, res) {
 
 function listarUsuarios(req, res) {
     req.getConnection((err, conn) => {
-        conn.query('SELECT cveUsuario, concat_ws(" ", nombre, apellidos) AS nombreCompleto, date_format(fechaRegistro, "%d-%m-%Y") AS fechaIngreso, CASE WHEN cveRol = 1 THEN "Instructor" WHEN cveRol = 2 THEN "Estudiante" ELSE "Admin" END as rol FROM tblusuario', (err, usuariosdata) => {
+        conn.query('SELECT cveUsuario, concat_ws(" ", nombre, apellidos) AS nombreCompleto, email, date_format(fechaRegistro, "%d-%m-%Y") AS fechaIngreso, CASE WHEN cveRol = 1 THEN "Instructor" WHEN cveRol = 2 THEN "Estudiante" ELSE "Admin" END as rol FROM tblusuario', (err, usuariosdata) => {
             if (err) {
                 res.render(err)
             } else {
