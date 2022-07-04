@@ -17,19 +17,29 @@
     </div>
     {{/if}}
 
-    <form action="/auth" method="POST" class="mt-4">
+    <form action="/" method="POST" class="mt-4">
 
-        <input type="email" name="email" placeholder="Email"
-            class="border border-gray-200 w-full text-lg placeholder-gray-250 p-2 my-2 bg-gray-200 focus:bg-white"
-            required>
+        <input type="email" name="email" placeholder="Email" {{#if valores}} value='{{valores.email}}' {{/if}}
+            class="border border-gray-200 w-full text-lg placeholder-gray-250 p-2 my-2 bg-gray-200 focus:bg-white" required>
 
-        <input type="password" name="password" placeholder="Password"
-            class="border border-gray-200 w-full text-lg placeholder-gray-250 p-2 my-2 bg-gray-200 focus:bg-white"
-            required>
+        <input type="password" name="password" placeholder="Password" {{#if valores}} value='{{valores.password}}' {{/if}}
+            class="border border-gray-200 w-full text-lg placeholder-gray-250 p-2 my-2 bg-gray-200 focus:bg-white" required>
 
         <!-- Se cambio el siguente boton -->
         <button onmouseover="pintar('#0f0')" onmouseout="pintar('#FFFFFF')" type="submit"
             class="rounded-md bg-blue-400 w-full text-lg text-white font-semibold p-2 my-3 hover:bg-blue-600 focus:bg-blue-700">Iniciar</button>
+
+        {{#if validaciones }}
+        {{#each validaciones}}
+        
+        <p class="text-red-500 font-bold text-lg my-3">{{ this.msg }}</p>
+        {{/each}}
+        {{/if}}
+        {{#if error }}
+       
+        <p class="text-red-500 font-bold text-lg my-3">{{error}}</p>
+     
+        {{/if}}
 
     </form>
     <div style="display: flex; justify-content: space-between;">

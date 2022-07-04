@@ -11,6 +11,7 @@ const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
+
 const app = express();
 
 //Configuración 
@@ -31,7 +32,7 @@ app.engine('.hbs', engine({
     defaultLayout: 'main',
     layoutsDir: __dirname + '/views/layouts/',
     partialsDir: __dirname + '/views/partials/',
-    helpers: require('./config/handlebars-helpers')
+    helpers: require('./config/handlebars-helpers') //only need this
 }));
 app.set('view engine', 'hbs');
 
@@ -40,6 +41,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
 
 
 //morgan sera usado para ver todas las peticiones que se hagan al servidor
@@ -74,10 +76,8 @@ app.use('/', loginRoutes);
 app.use('/inicio', inicioRoutes);
 app.use('/curso', cursoRoutes);
 
-
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
 app.use('/static', express.static('src/views/public'));
-
 
 //Al acceder a cualquier ruta no existente mandara a una página de error
 app.get('*', (req, res) => {

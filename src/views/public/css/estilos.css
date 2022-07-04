@@ -15,11 +15,11 @@ h1 {
 }
 
 .form {
-  width: 380px;
+  width: 500px;
   padding: 16px;
   border-radius: 10px;
   margin: auto;
-  background-color: #ccc;
+  border: solid 2px black;
 }
 
 .formCrearCurso {
@@ -699,4 +699,13 @@ td {
 .cursos_links_eliminar:hover {
   color: blue;
 
+}
+
+.swal-wide{
+  width:850px !important;
+}
+
+.black{
+  border: solid 2px gray !important;
+  color:blue;
 }

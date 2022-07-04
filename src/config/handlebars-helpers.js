@@ -1,4 +1,3 @@
-
 module.exports = {
 
     ifeq: function (a, b, options) {
@@ -37,3 +36,4 @@ module.exports = {
     }
 
 };
+
