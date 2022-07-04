@@ -42,13 +42,12 @@ function upload(req, res) {
     req.getConnection((err, conn) => {
         conn.query(`INSERT INTO tblcurso (nombre, descripcion, estatus, fechaRegistro, cantidadUsuarios, rutaImagen,cveUsuario) 
         values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',${req.session.cveUsuario} )`, (err2, rows) => {
-            usuario = req.session.cveUsuario;
+            var usuario = req.session.cveUsuario;
                 console.log(usuario);
                 res.render('curso/crearCurso',{alert:true});
 
         });
     });
-    console.log(req.session.cveUsuario);
 }
 
 module.exports = {
