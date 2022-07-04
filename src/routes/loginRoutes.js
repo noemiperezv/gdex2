@@ -9,7 +9,7 @@ router.post('/', validator.login, LoginController.auth);
 //post
 router.post('/registrar', validator.register,LoginController.regUser);
 //Put
-
+router.get('/logout', LoginController.logout);
 //Delete
 module.exports = router;
 

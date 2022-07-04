@@ -1,0 +1,63 @@
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol}}
+
+<section style="padding:50px;">
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#listaUsuarios').DataTable();
+        });
+    </script>
+
+    <h3>Administración de Usuarios</h3>
+    <hr>
+    <br>
+
+    <table id="listaUsuarios" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th><b>ID</b></th>
+                <th><b>Nombre</b></th>
+                <th><b>Fecha ingreso</b></th>
+                <th><b>Rol</b></th>
+                <th><b>Acción</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each usuarios}}
+            <tr>
+                <td>{{cveUsuario}}</td>
+                <td>{{nombreCompleto}}</td>
+                <td>{{fechaIngreso}}</td>
+                <td>{{rol}}</td>
+                <td>
+                    <div align="left">
+                        <ul style="display:block;">
+                            <a class="cursos_links_editar" href="#" style="text-decoration: none;">
+                                <i class="icon-edit" style="font-size: 35px; color: rgb(255, 223, 43);"></i>
+                                <!--Editar curso-->
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="cursos_links_eliminar" href="#" style="text-decoration: none;">
+                                <i class="icon-trash" style="font-size: 35px; color: rgb(219, 68, 68);"></i>
+                                <!--Eliminar curso-->
+                            </a>
+                        </ul>
+                    </div>
+                </td>
+
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th><b>ID</b></th>
+                <th><b>Nombre</b></th>
+                <th><b>Fecha ingreso</b></th>
+                <th><b>Rol</b></th>
+                <th><b>Acción</b></th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+</section>

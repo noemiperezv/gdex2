@@ -7,6 +7,16 @@
     id="Datos">
 
     <h1 class="text-3xl  font-bold text-center">Login</h1>
+    <br>
+    {{#if error}}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{error}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {{/if}}
+
     <form action="/" method="POST" class="mt-4">
 
         <input type="email" name="email" placeholder="Email" {{#if valores}} value='{{valores.email}}' {{/if}}

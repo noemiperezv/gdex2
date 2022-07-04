@@ -12,14 +12,14 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
 
-const app= express();
+const app = express();
 
 //Configuración 
-app.set('port',3000);
+app.set('port', 3000);
 
 //Asignación de puerto
-app.listen(app.get('port'), ()=>{
-    console.log("Corriendo en puerto: http://localhost:"+app.get('port'));
+app.listen(app.get('port'), () => {
+    console.log("Corriendo en puerto: http://localhost:" + app.get('port'));
 });
 
 //se usaran archivos tipo hbs para las vistas y se asigna la carpeta vistas para obtener las vistas de esa carpeta
@@ -29,7 +29,7 @@ app.listen(app.get('port'), ()=>{
 app.set('views', __dirname + '/views');
 app.engine('.hbs', engine({
     extname: '.hbs',
-    defaultLayout: 'main', 
+    defaultLayout: 'main',
     layoutsDir: __dirname + '/views/layouts/',
     partialsDir: __dirname + '/views/partials/',
     helpers: require('./config/handlebars-helpers') //only need this
@@ -75,9 +75,9 @@ app.use(session({
 app.use('/', loginRoutes);
 app.use('/inicio', inicioRoutes);
 app.use('/curso', cursoRoutes);
+
 //se asigna la ruta /static para poder hacer uso de archivos css,js, img, videos , etc.
 app.use('/static', express.static('src/views/public'));
-
 
 //Al acceder a cualquier ruta no existente mandara a una página de error
 app.get('*', (req, res) => {

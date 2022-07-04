@@ -21,15 +21,15 @@ function editarTema(req, res) {
 function misCursos(req, res) {
     req.getConnection((err, conn) => {
         conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario WHERE u.cveUsuario = 1', (err, miscursosdata) => {
-            if(err){
+            if (err) {
                 res.render(err)
-            }else{
-                res.render("curso/miscursos", {miscursos: miscursosdata})
+            } else {
+                res.render("curso/miscursos", { miscursos: miscursosdata })
             }
-   
+
         });
     });
-  
+
 }
 
 function upload(req, res) {
