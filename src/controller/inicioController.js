@@ -1,16 +1,33 @@
+const jwt = require("jsonwebtoken");
+const { promisify } = require('util')
+
 function inicio(req, res) {
     req.getConnection((err, conn) => {
         conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen, concat_ws(" ", u.nombre, u.apellidos) AS nombreCompleto FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario', (err, cursosdata) => {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/inicio", { cursos: cursosdata, sesion: req.session })
+                res.render("inicio/inicio", { cursos: cursosdata, sesion: req.token.user })
             }
 
         });
     });
 }
 
+async function verifytoken(req, res, next) {
+
+    if (req.cookies.jwt) {
+        const decodificada = await promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+        console.log(decodificada)
+       
+        req.token = decodificada;
+        console.log(req.token.user)
+        //req.user = results[0];
+        next();
+    } else {
+        res.redirect('/')
+    }
+}
 
 function misCursos(req, res) {
     req.getConnection((err, conn) => {
@@ -74,5 +91,6 @@ module.exports = {
     verCurso,
     seguirCurso,
     listarUsuarios,
+    verifytoken
 
 }

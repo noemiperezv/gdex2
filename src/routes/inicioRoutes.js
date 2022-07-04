@@ -2,7 +2,7 @@ const express = require('express');
 const inicioController = require('../controller/inicioController');
 const router = express.Router();
 
-router.get('/', inicioController.inicio);
+router.get('/', inicioController.verifytoken ,inicioController.inicio);
 router.get('/misCursos', inicioController.misCursos);
 router.get('/aprendiendo', inicioController.aprendiendo);
 router.get('/verCurso', inicioController.verCurso);
