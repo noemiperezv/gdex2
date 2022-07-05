@@ -10,6 +10,7 @@ const cursoRoutes = require('./routes/cursoRoutes');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const flash = require('connect-flash');
 
 
 const app = express();
@@ -21,6 +22,8 @@ app.set('port', 3000);
 app.listen(app.get('port'), () => {
     console.log("Corriendo en puerto: http://localhost:" + app.get('port'));
 });
+
+app.use(flash());
 
 //se usaran archivos tipo hbs para las vistas y se asigna la carpeta vistas para obtener las vistas de esa carpeta
 //motor de plantilla
