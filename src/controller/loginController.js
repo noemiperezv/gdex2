@@ -7,6 +7,7 @@ const { validationResult } = require('express-validator');
 
 function login(req, res) {
     if (req.session.loggedin != true) {
+        //res.render('auth/index', {flash: req.flash('message')});
         res.render('auth/index');
     } else {
         res.redirect('/inicio');
@@ -79,6 +80,7 @@ function logout(req, res) {
         req.session.destroy();
 
     }
+    //req.flash('message', 'Has cerrado sesión correctamente.');
     res.redirect('/');
 }
 
