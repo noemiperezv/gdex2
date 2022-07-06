@@ -8,7 +8,7 @@
 
     <h1 class="text-3xl  font-bold text-center">Login</h1>
     <br>
-    {{#ifgt validaciones 0}}
+    {{#if validaciones}}
     {{#each validaciones}}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>{{this.msg}}</strong>
@@ -17,7 +17,7 @@
         </button>
     </div>
     {{/each}}
-    {{/ifgt}}
+    {{/if}}
 
     {{#if error }}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
