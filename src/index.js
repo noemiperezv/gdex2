@@ -10,13 +10,15 @@ const cursoRoutes = require('./routes/cursoRoutes');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const flash = require('connect-flash');
 
+const flash = require('connect-flash');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
 //Configuración 
 app.set('port', 3000);
+app.use(cookieParser())
 
 //Asignación de puerto
 app.listen(app.get('port'), () => {
@@ -55,7 +57,7 @@ app.use(myconnection(mysql, {
     host: 'localhost',
     user: 'root',
     password: '',
-    port: '3306',
+    port: '3309',
     database: 'gdex'
 }));
 //Uso de sesiones
