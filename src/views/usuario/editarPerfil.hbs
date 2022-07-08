@@ -1,0 +1,76 @@
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
+<section style="padding:50px;">
+
+    <h4>Perfil de usuario</h4>
+    <hr>
+    <div align="center">
+        <div class="card border-info mb-3" style="max-width: 800px;">
+            <div class="card-header"><h4><i class="icon-user" style="font-size: 35px; color: rgb(103, 195, 231);"></i>
+            &nbsp;Información de usuario</h4></div>
+            <div class="card-body text-info">
+                <form action="/usuario/modificarUsuario" method="POST">
+                {{#if flash}}
+                    {{#ifgt flash 0}}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Se guardaron los datos correctamente.</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {{else}}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error: No se pudieron guardar los datos.</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {{/ifgt}}
+                    {{/if}}
+
+                    {{#if usuario}}
+                    {{#each usuario}}
+                    <div class="form-row">
+                        <input type="number" name="cveUsuario" placeholder="cveUsuario" value='{{cveUsuario}}'
+                            required="true" hidden>
+                        <div class="col-md-6 mb-2">
+                            <label for="name">Nombre(s)</label>
+                            <input class="form-control" type="text" id="name" name="name" placeholder="Nombre"
+                                value='{{nombre}}' required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label for="lastname">Apellido(s)</label>
+                            <input class="form-control" type="text" id="lastname" name="lastname" placeholder="Nombre"
+                                value='{{apellidos}}' required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label for="matricula">Matrícula</label>
+                            <input class="form-control" type="text" id="matricula" name="matricula"
+                                placeholder="Matrícula" value='{{matricula}}' required>
+                        </div>
+                        <div class="col-md-6 mb-2 col-auto">
+                            <label for="email">Correo electrónico</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">@</div>
+                                </div>
+                                <input class="form-control" type="email" id="email" name="email"
+                                    placeholder="Correo Electrónico" value='{{email}}' required>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    <br>
+                    <div align="center">
+                        <button type="submit" class="btn btn-warning"><i class="icon-pencil" style="font-size: 20px; color:#000;"></i>
+                        &nbsp;Guardar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{{> scripts}}
