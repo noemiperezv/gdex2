@@ -108,6 +108,7 @@ function regUser(req, res) {
 
                                     conn.query('SELECT cveUsuario, nombre, apellidos, matricula, email, password, fechaRegistro, cveRol FROM tblusuario WHERE email = ?', [data.email], (err, emails) => {
                                         req.session.loggedin = true;
+                                        const element = JSON.parse(JSON.stringify(emails))
                                         emails.forEach(datos => {
                                             req.session.cveUsuario = datos.cveUsuario;
                                             req.session.nombre = datos.nombre;
@@ -118,7 +119,13 @@ function regUser(req, res) {
                                             req.session.cveRol = datos.cveRol;
 
                                         });
+                                        const token = jwt.sign({ user: element[0] }, 'secretkey', { expiresIn: '1h' })
 
+                                        const cookiesOptions = {
+                                            expires: new Date(Date.now() + 50000),
+                                            httpOnly: true
+                                        }
+                                        res.cookie('jwt', token, cookiesOptions)
                                         res.redirect('/inicio');
                                     });
                                 });
