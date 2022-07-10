@@ -3,7 +3,8 @@ const cors = require('cors');
 const sharp = require('sharp');
 const app = express();
 const Swal = require('sweetalert2')
-
+const jwt = require("jsonwebtoken");
+const { promisify } = require('util')
 
 app.use(cors());
 app.use(express.json());
@@ -32,13 +33,11 @@ function modificarUsuario(req, res) {
         conn.query(`UPDATE tblusuario set nombre = '${data.name}', apellidos = '${data.lastname}', matricula = '${data.matricula}', email = '${data.email}' WHERE cveUsuario = ?`, [data.cveUsuario], (err, usuariodata) => {
 
                 conn.query('SELECT cveUsuario, nombre, apellidos, matricula FROM tblusuario WHERE cveUsuario = ?', [data.cveUsuario], (err, usuariomodificadodata) => {
-                    if (usuariomodificadodata.length > 0) {
-                        //res.render(`/usuario/editarPerfil/${data.cveUsuario}`, { usuario: usuariomodificadodata, sesion: req.session });
-                        req.flash('message', '1');
+                    if (err) {
+                        req.flash('message', 'No se pudieron modificar los datos');
                         res.redirect(`/usuario/editarPerfil/${data.cveUsuario}`);
                     } else {
-                        //res.render('usuario/editarPerfil', { error: 'Error: No se pudieron obtener los datos del usuario.', sesion: req.session });
-                        req.flash('message', '0');
+                        req.flash('message', 'Se modificaron los datos correctamente');
                         res.redirect(`/usuario/editarPerfil/${data.cveUsuario}`);
                     }
                 });
