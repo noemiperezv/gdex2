@@ -62,9 +62,7 @@ function auth(req, res) {
                             res.cookie('jwt', token, cookiesOptions)
 
                             res.redirect('/inicio');
-
                         }
-
                     });
                 } else {
                     res.render('auth/index', { validaciones: errors, valores: data, error: 'Error: Usuario no existe.' });

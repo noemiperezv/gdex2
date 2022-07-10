@@ -5,26 +5,19 @@
     <hr>
     <div align="center">
         <div class="card border-info mb-3" style="max-width: 800px;">
-            <div class="card-header"><h4><i class="icon-user" style="font-size: 35px; color: rgb(103, 195, 231);"></i>
-            &nbsp;Información de usuario</h4></div>
+            <div class="card-header">
+                <h4><i class="icon-user" style="font-size: 35px; color: rgb(103, 195, 231);"></i>
+                    &nbsp;Información de usuario</h4>
+            </div>
             <div class="card-body text-info">
                 <form action="/usuario/modificarUsuario" method="POST">
-                {{#if flash}}
-                    {{#ifgt flash 0}}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Se guardaron los datos correctamente.</strong>
+                    {{#if flash}}
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        <strong>{{flash}}</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {{else}}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Error: No se pudieron guardar los datos.</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    {{/ifgt}}
                     {{/if}}
 
                     {{#if usuario}}
@@ -62,8 +55,9 @@
                     {{/if}}
                     <br>
                     <div align="center">
-                        <button type="submit" class="btn btn-warning"><i class="icon-pencil" style="font-size: 20px; color:#000;"></i>
-                        &nbsp;Guardar</button>
+                        <button type="submit" class="btn btn-warning"><i class="icon-pencil"
+                                style="font-size: 20px; color:#000;"></i>
+                            &nbsp;Guardar</button>
                     </div>
                 </form>
 

@@ -1,0 +1,81 @@
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
+<section style="padding:50px;">
+
+    <h4>Editar Usuario</h4>
+    <hr>
+    <div align="center">
+        <div class="card border-success mb-3" style="max-width: 800px;">
+            <div class="card-header"><h4><i class="icon-user" style="font-size: 35px; color: rgb(11, 175, 52);"></i>
+            &nbsp;Información de usuario</h4></div>
+            <div class="card-body text-success">
+                <form action="/inicio/editarUsuario" method="POST">
+
+                    {{#if usuario}}
+                    {{#each usuario}}
+                    <div class="form-row">
+                        <input type="number" name="cveUsuario" placeholder="cveUsuario" value='{{cveUsuario}}'
+                            required="true" hidden>
+                        <div class="col-md-6 mb-2">
+                            <label for="name">Nombre(s)</label>
+                            <input class="form-control" type="text" id="name" name="name" placeholder="Nombre"
+                                value='{{nombre}}' disabled>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label for="lastname">Apellido(s)</label>
+                            <input class="form-control" type="text" id="lastname" name="lastname" placeholder="Nombre"
+                                value='{{apellidos}}' disabled>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label for="matricula">Matrícula</label>
+                            <input class="form-control" type="text" id="matricula" name="matricula"
+                                placeholder="Matrícula" value='{{matricula}}' disabled>
+                        </div>
+                        <div class="col-md-6 mb-2 col-auto">
+                            <label for="email">Correo electrónico</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">@</div>
+                                </div>
+                                <input class="form-control" type="email" id="email" name="email"
+                                    placeholder="Correo Electrónico" value='{{email}}' disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2 col-auto">
+                            <div class="form-group">
+                                <label for="cveRol">Rol</label>
+                                <select class="form-control" id="cveRol" name="cveRol" required>
+                                    {{#ifeq cveRol 1}}
+                                    <option value="1" selected>Instructor</option>
+                                    <option value="2">Alumno</option>
+                                    <option value="3">Administrador</option>
+                                    {{/ifeq}}
+                                    {{#ifeq cveRol 2}}
+                                    <option value="1">Instructor</option>
+                                    <option value="2" selected>Alumno</option>
+                                    <option value="3">Administrador</option>
+                                    {{/ifeq}}
+                                    {{#ifeq cveRol 3}}
+                                    <option value="1">Instructor</option>
+                                    <option value="2">Alumno</option>
+                                    <option value="3" selected>Administrador</option>
+                                    {{/ifeq}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    <br>
+                    <div align="center">
+                        <button type="submit" class="btn btn-warning"><i class="icon-pencil" style="font-size: 20px; color:#000;"></i>
+                        &nbsp;Guardar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{{> scripts}}
