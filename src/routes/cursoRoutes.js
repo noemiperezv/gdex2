@@ -14,7 +14,6 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 router.get('/', cursoController.crearCurso);
-router.get('/misCursos', cursoController.misCursos);
 router.get('/editarTema', cursoController.editarTema);
 router.get('/editarCurso', cursoController.editarCurso);
 router.post('/upload', upload.single('imagen'),cursoController.upload);

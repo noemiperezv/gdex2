@@ -3,7 +3,8 @@ const cors = require('cors');
 const sharp = require('sharp');
 const app= express();
 const Swal = require('sweetalert2')
-
+const jwt = require("jsonwebtoken");
+const { promisify } = require('util')
 
 app.use(cors());
 app.use(express.json());
@@ -18,19 +19,7 @@ function editarCurso(req, res) {
 function editarTema(req, res) {
     res.render("curso/editarTema");
 }
-function misCursos(req, res) {
-    req.getConnection((err, conn) => {
-        conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario WHERE u.cveUsuario = 1', (err, miscursosdata) => {
-            if (err) {
-                res.render(err)
-            } else {
-                res.render("curso/miscursos", { miscursos: miscursosdata })
-            }
 
-        });
-    });
-
-}
 
 function upload(req, res) {
     var nombreImagen = "";
@@ -41,10 +30,10 @@ function upload(req, res) {
     
     req.getConnection((err, conn) => {
         conn.query(`INSERT INTO tblcurso (nombre, descripcion, estatus, fechaRegistro, cantidadUsuarios, rutaImagen,cveUsuario) 
-        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',${req.session.cveUsuario} )`, (err2, rows) => {
+        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',6 )`, (err2, rows) => {
             usuario = req.session.cveUsuario;
                 console.log(usuario);
-                res.render('curso/crearCurso',{alert:true});
+                res.render('curso/crearCurso',{alert:true, sesion: req.session});
 
         });
     });
@@ -53,7 +42,6 @@ function upload(req, res) {
 
 module.exports = {
     crearCurso,
-    misCursos,
     editarTema,
     editarCurso,
     upload
