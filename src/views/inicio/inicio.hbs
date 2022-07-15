@@ -12,9 +12,16 @@
   <div class="card-columns">
     {{#each cursos}}
     <div class="card">
+      {{#if rutaImagen}}
+      <div align="center">
+        <img class="card-img-top" src="/static/uploads/img/{{rutaImagen}}" style="width:250px; height:auto;"
+          alt="Card image cap">
+      </div>
+      {{else}}
       <div align="center">
         <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
       </div>
+      {{/if}}
       <div class="card-body">
         <h5 class="card-title">
           <p>{{nombre}}</p>
