@@ -13,6 +13,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
+async function verifytoken(req, res, next) {
+
+    if (req.cookies.jwt) {
+        const decodificada = await promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+        console.log(decodificada)
+
+        req.token = decodificada;
+        console.log(req.token.user)
+        //req.user = results[0];
+        next();
+    } else {
+        res.redirect('/')
+    }
+}
 
 function editarPerfil(req, res) {
     const cveUsuario = req.params.id;
@@ -20,10 +34,10 @@ function editarPerfil(req, res) {
     req.getConnection((err, conn) => {
         conn.query('SELECT cveUsuario, nombre, apellidos, matricula, email FROM tblusuario WHERE cveUsuario = ?', [cveUsuario], (err, usuariodata) => {
             if (usuariodata.length > 0) {
-                res.render("usuario/editarPerfil", { usuario: usuariodata, sesion: req.session, flash: req.flash('message') });
+                res.render("usuario/editarPerfil", { usuario: usuariodata, sesion: req.token.user, flash: req.flash('message') });
                 console.log(JSON.parse(JSON.stringify(usuariodata)));
             } else {
-                res.render('usuario/editarPerfil', { error: 'Error: No se pudieron obtener los datos de usuario.', sesion: req.session });
+                res.render('usuario/editarPerfil', { error: 'Error: No se pudieron obtener los datos de usuario.', sesion: req.token.user });
             }
         });
     });
@@ -51,7 +65,7 @@ function modificarUsuario(req, res) {
 
 function cambiarPassword(req, res) {
     const idUsuario = req.params.id;
-    res.render("usuario/cambiarPassword", { sesion: req.session, cveUsuario: idUsuario });
+    res.render("usuario/cambiarPassword", { sesion: req.token.user, cveUsuario: idUsuario });
 }
 
 function modificarPassword(req, res) {
@@ -72,27 +86,27 @@ function modificarPassword(req, res) {
                                 } else {
                                     conn.query(`UPDATE set password = '${data.newpassword}' FROM tblusuario WHERE cveUsuario = ?`, [data.cveUsuario], (err, passwords) => { //Actualiza en bd la nueva contraseña
                                         if (err) {
-                                            res.render('usuario/cambiarPassword', { error: 'No se pudo cambiar la contraseña.' });
+                                            res.render('usuario/cambiarPassword', { error: 'No se pudo cambiar la contraseña.', sesion: req.token.user });
                                         } else {
-                                            res.render('usuario/cambiarPassword', { success: 'Se cambió la contraseña.' });
+                                            res.render('usuario/cambiarPassword', { success: 'Se cambió la contraseña.', sesion: req.token.user });
                                         }
                                     });
 
                                 }
                             });
                         } else {
-                            res.render('usuario/cambiarPassword', { error: 'Error: No se pudieron consultar los datos.' });
+                            res.render('usuario/cambiarPassword', { error: 'Error: No se pudieron consultar los datos.', sesion: req.token.user });
                         }
                     });
                 });
             });
 
         } else {
-            res.render('usuario/cambiarPassword', { error: 'Error: Nuevas contraseñas no coinciden.' });
+            res.render('usuario/cambiarPassword', { error: 'Error: Nuevas contraseñas no coinciden.', sesion: req.token.user });
         }
 
     } else {
-        res.render('usuario/cambiarPassword', { error: 'Error: Contraseñas actuales no coinciden.' });
+        res.render('usuario/cambiarPassword', { error: 'Error: Contraseñas actuales no coinciden.', sesion: req.token.user });
     }
 
 
@@ -103,4 +117,5 @@ module.exports = {
     modificarUsuario,
     cambiarPassword,
     modificarPassword,
+    verifytoken,
 }

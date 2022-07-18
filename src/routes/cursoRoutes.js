@@ -13,8 +13,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage});
 
-router.get('/', cursoController.crearCurso);
-router.get('/editarTema', cursoController.editarTema);
-router.get('/editarCurso', cursoController.editarCurso);
-router.post('/upload', upload.single('imagen'),cursoController.upload);
+router.get('/', cursoController.verifytoken, cursoController.crearCurso);
+router.get('/editarTema', cursoController.verifytoken, cursoController.editarTema);
+router.get('/editarCurso', cursoController.verifytoken, cursoController.editarCurso);
+router.post('/upload', cursoController.verifytoken, upload.single('imagen'),cursoController.upload);
 module.exports = router;
