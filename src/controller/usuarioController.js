@@ -76,7 +76,7 @@ function modificarPassword(req, res) {
                 data.newpassword = hash; //Asigna el hash de la nueva contraseña
 
                 req.getConnection((err, conn) => {
-                    conn.query('SELECT cveUsuario, password FROM tblusuario WHERE cveUsuario = ?', [data.cveUsuario], (err, userdata) => { //Consulta la contraseña actual del usuario en bd
+                    conn.query('SELECT cveUsuario, password FROM tblusuario WHERE cveUsuario = ?', [req.token.user.cveUsuario], (err, userdata) => { //Consulta la contraseña actual del usuario en bd
                         if (userdata.length > 0) {
                             const element = JSON.parse(JSON.stringify(userdata))
 
@@ -84,7 +84,7 @@ function modificarPassword(req, res) {
                                 if (!isMatch) {
                                     res.render('usuario/cambiarPassword', { error: 'Error: Contraseña actual incorrecta.' });
                                 } else {
-                                    conn.query(`UPDATE set password = '${data.newpassword}' FROM tblusuario WHERE cveUsuario = ?`, [data.cveUsuario], (err, passwords) => { //Actualiza en bd la nueva contraseña
+                                    conn.query(`UPDATE tblusuario SET password = '${data.newpassword}' WHERE cveUsuario = ?`, [req.token.user.cveUsuario], (err, passwords) => { //Actualiza en bd la nueva contraseña
                                         if (err) {
                                             res.render('usuario/cambiarPassword', { error: 'No se pudo cambiar la contraseña.', sesion: req.token.user });
                                         } else {
