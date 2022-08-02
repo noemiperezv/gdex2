@@ -1,97 +1,159 @@
-  {{> navbar }}
+ {{> navbar }}
     <main class="mainContent marco">
-        <h1 class="centrar">Editar tema "nombre tema"</h1>
+        {{#each temas}}
+        <h1 class="centrar">Editar tema: "{{nombre}}"</h1>
+        {{/each}}
         <div>
-            
             <div class="centrar">
-                Nombre curso
-                <div>
-                    <input type="text" placeholder="Nuevo nombre de curso">
-                </div>
+                <form action="../curso/modificarTema" method="POST">
+                    <div class="container centro">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="nombre" placeholder="Nuevo nombre de tema">
+                                </div>
+                                {{#each temas}}
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="cveTema" value="{{cveTema}}" hidden>
+                                </div>
+                                {{/each}}
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-success btn-block" type="submit">Cambiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
             </div>
             <div>
                 <div class="centrar">
-                    Material del tema
+                    <h3>Material del tema</h3>
                 </div>
-                <table class="scrollable centrar marLate">
+                {{#if material}}
+                <table class="scrollable centrar marLate redondeado table-striped table-hover centro">
 
-                    <thead>
+                    <thead class="thead-green redondeado">
                         <tr>
                             <th><span class="text">Nombre material</span></th>
                             <th><span class="text">Eliminar material</span></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="redondeado">
+                        {{#each material}}
                         <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
+                            <th>{{rutaMaterial}}</th>
+                            <form action="../curso/eliminarMaterial" method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="cveMaterial" value="{{cveMaterial}}" hidden>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="cveTema" value="{{cveTema}}" hidden>
+                                </div>
+                                <th><button class="btn btn-outline-info" type="submit" aria-selected="true">Borrar</button></th>
+                            </form>
                         </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-                        <tr>
-                            <th>Sección 1</th>
-                            <th>Borrar</th>
-
-                        </tr>
-
+                        {{/each}}
                     </tbody>
                 </table>
-                <div class="flex">
-                    <input type="file" name="" id="">
-                    <input type="button" value="agregar material">
-                </div>
-                <div class="centrar">
-                    Teoría
-                    <div >
-                        <textarea class="areaTeoria" name="" id="" cols="30" rows="10"></textarea>
+                {{else}}
+                <div class="centro centrar flex">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 contenedor-secciones ">
+                                <h3>No hay material disponible para este tema.</h3>
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>
-                <div class="flex">
-                    <input type="button" value="Cancelar">
-                    <input type="submit" value="Modificar">
+                {{/if}}
+                <div class="">
+                    <form action="../curso/agregarMaterial" method="POST" enctype="multipart/form-data">
+                        <div class="container centro">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input type="file" class="form-control black" name="archivo" id="">
+                                {{#each temas}}
+                                    <input type="text" class="form-control" name="cveTema" id="" value="{{cveTema}}" hidden>
+                                </div>
+                                {{/each}}
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-success btn-block btn-lg" value="">Agregar material</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+                <form action="../curso/agregarTeoria" method="post">
+                    <div class="centrar">
+                        <h3>Teoría</h3>
+                        <div >
+                            {{#each temas}}
+                            <textarea class="areaTeoria contenedor-secciones centro justificado" name="teoria" id="" cols="30" rows="10">{{teoria}}</textarea>
+                            <input type="text" name="cveTema" value="{{cveTema}}" hidden>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div class="flex">
+                        {{#each temas}}
+                        <a type="button" class="btn btn-danger" href="../editarCurso/:{{cveTema}}">Cancelar</a>
+                        {{/each}}
+                        <button type="submit" class="btn btn-success">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
     </main>
+   {{> scripts}}
+   {{#if cambioTema}}
+    <script>
+        Swal.fire({
+            title: "Se ha modificado el nombre de manera correcta!!",
+            icon:"success",
+            type: "success",
+            showConfirmButton: true
+        }).then(function() {
+        });
+    </script>
+ {{/if}}
+ {{#if agregarMaterial}}
+    <script>
+        Swal.fire({
+            title: "Se agrego el material con éxito!",
+            icon:"success",
+            type: "success",
+            showConfirmButton: true
+        }).then(function() {
+        });
+    </script>
+ {{/if}}
+
+ {{#if eliminarMaterial}}
+        <script>
+            Swal.fire({
+            title: '¿Estás seguro que deseas eliminar esta recurso?',
+            text: "¡No podras revertir los cambios!",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, eliminarlo!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '../curso/borrarMaterial/{{cveMaterial}}';
+                Swal.fire(
+                'Borrado!',
+                'El tema ha sido eliminado.',
+                'success'
+                )
+            }
+            })
+        </script>
+    {{/if}}
    
   
