@@ -61,4 +61,5 @@ module.exports = {
     editarCurso,
     upload,
     verifytoken,
+    //eliminarCurso
 }
