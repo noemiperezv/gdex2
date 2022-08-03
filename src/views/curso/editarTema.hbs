@@ -1,4 +1,4 @@
- {{> navbar }}
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
     <main class="mainContent marco">
         {{#each temas}}
         <h1 class="centrar">Editar tema: "{{nombre}}"</h1>
@@ -106,8 +106,9 @@
                 </form>
             </div>
         </div>
+    </div>
 
-    </main>
+</main>
    {{> scripts}}
    {{#if cambioTema}}
     <script>
@@ -155,5 +156,4 @@
             })
         </script>
     {{/if}}
-   
-  
+    {{> footer }}

@@ -1,23 +1,26 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/index"><img src="/static/img/logo.png" style="width:100px; height:auto;"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00a1c9;">
+    <a class="navbar-brand" href="/inicio"><img src="/static/img/logo.png" style="width:100px; height:auto;"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-        
-        <li class="nav-item" style="padding-left:50px;"></li>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
 
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+            <li class="nav-item" style="padding-left:50px;"></li>
 
-        <li class="nav-item" style="padding-left:80px;"></li>
-                <li class="nav-item" style="padding-left:80px;"></li>
+            <!--<form class="form-inline my-2 my-lg-0">
+                <input id="buscador" class="form-control mr-sm-2" type="text" placeholder="Ingresar búsqueda..."
+                    aria-label="Search">
+                <button id="btnBuscar" class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+            </form>-->
+            
 
-        <!--<li class="nav-item dropdown">
+            <li class="nav-item" style="padding-left:80px;"></li>
+            <li class="nav-item" style="padding-left:80px;"></li>
+
+            <!--<li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Categorías
         </a>
@@ -29,37 +32,51 @@
         </div>
         </li>-->
 
-        <li class="nav-item" style="padding-left:80px;"></li>
+            <li class="nav-item" style="padding-left:80px;"></li>
 
-        <li class="nav-item active">
-            <a class="nav-link" href="/index/aprendiendo">Aprendiendo <span class="sr-only"></span></a>
-        </li>
-        <li class="nav-item" style="padding-left:40px;"></li>
-        <li class="nav-item">
-            <a class="nav-link" href="/index/miscursos">Mis cursos</a>
-        </li>
+            {{#ifeq idRol 1}}
+            <!--Instructor-->
+            <li class="nav-item active">
+                <a class="nav-link" href="/inicio/misCursos">Mis Cursos<span class="sr-only"></span></a>
+            </li>
+            {{/ifeq}}
 
-        <li class="nav-item" style="padding-left:80px;"></li>
-        <li class="nav-item" style="padding-left:80px;"></li>
+            {{#ifeq idRol 2}}
+            <!--Estudiante-->
+            <li class="nav-item active">
+                <a class="nav-link" href="/inicio/aprendiendo">Aprendiendo<span class="sr-only"></span></a>
+            </li>
+            {{/ifeq}}
 
-    </ul>
-    
-    <ul class="navbar-nav mr-auto" style="float: right;">
-        
-        <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="https://cdn-icons-png.flaticon.com/512/206/206855.png" style="width:30px; height:auto;">&nbsp;&nbsp;&nbsp;
-            Perfil {{nombre}}
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Editar Perfil</a>
-            <a class="dropdown-item" href="#">Cambiar contraseña</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Cerrar sesión</a>
-        </div>
-        </li>
-        
-    </ul>
+            {{#ifeq idRol 3}}
+            <!--Admin-->
+            <li class="nav-item active">
+                <a class="nav-link" href="/inicio/usuarios/{{cveUsuario}}">Usuarios<span class="sr-only"></span></a>
+            </li>
+            {{/ifeq}}
 
-  </div>
+            <li class="nav-item" style="padding-left:240px;"></li>
+            <li class="nav-item" style="padding-left:240px;"></li>
+
+        </ul>
+
+        <ul class="navbar-nav mr-auto" style="float: right;">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="https://cdn-icons-png.flaticon.com/512/206/206855.png"
+                        style="width:30px; height:auto;">&nbsp;&nbsp;&nbsp;
+                    {{nombre}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/usuario/editarPerfil/{{cveUsuario}}">Editar Perfil</a>
+                    <a class="dropdown-item" href="/usuario/cambiarPassword/{{cveUsuario}}">Cambiar contraseña</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
 </nav>

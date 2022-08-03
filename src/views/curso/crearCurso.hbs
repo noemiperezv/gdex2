@@ -1,22 +1,26 @@
-  {{> navbar }}
-    <main class="mainContent">
-        <form class="form" action="../curso/upload" method="post" enctype="multipart/form-data">
+
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
+
+    <main class="mainContent" >
+        <form class="form card border-primary mb-3" action="../curso/upload" method="post" enctype="multipart/form-data" style="width:800px;">
             <h1 class="centrar">Crear curso</h1>
             <div>
-            <div class="formCrearCurso">
+                
+            <div class="formCrearCurso card-body text-primary">
                 <div class="form-group">
-                    <label for="name">Nombre curso:</label>
+                    <label for="name">Nombre curso</label>
                     <input class="form-control black" type="text" id="nameCurso" name="nameCurso" required>
                 </div>
                 <div class="form-group">
-                    <label for="image">Imagen curso:</label>
+                    <label for="image">Imagen curso</label>
                     <input class="form-control black" type="file" accept="image/png,image/jpeg,image/gif,image/ico,image/icoa,image/jpg" id="imagen" name="imagen" >
                 </div>
                 <div class="form-group">
-                    <label for="descripcion">Descripción:</label>
-                    <textarea class="form-control black" id="descripcion" name="descripcion" cols="30" rows="10"></textarea>
+                    <label for="descripcion">Descripción</label>
+                    <textarea class="form-control black" id="descripcion" name="descripcion" cols="20" rows="6" required></textarea>
                 </div>
             </div>
+
             </div>            
             <div class="btnsCrearCurso">
                 <div class="container">
@@ -32,6 +36,9 @@
             </div>
         </form>
     </main>
+
+    {{> footer }}
+    
      {{> scripts}}
 
     {{#if alert }}
@@ -42,11 +49,8 @@
                 type: "success",
                 showConfirmButton: true
             }).then(function() {
-                window.location = "/inicio";
+                window.location = "/inicio/misCursos";
             });
         </script>
     {{/if}}
-    
-    
-
     

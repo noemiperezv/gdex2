@@ -1,0 +1,59 @@
+{{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
+
+<br>
+
+{{> search oCursos = cursos}}
+
+<section style="padding:50px;">
+
+  <h4>Todos los cursos</h4>
+  <hr>
+  {{#ifgt cursos 0}}
+  <div class="card-columns">
+    {{#each cursos}}
+    <div class="card">
+      {{#if rutaImagen}}
+      <div align="center">
+        <img class="card-img-top" src="/static/uploads/img/{{rutaImagen}}" style="width:250px; height:auto;"
+          alt="Card image cap">
+      </div>
+      {{else}}
+      <div align="center">
+        <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
+      </div>
+      {{/if}}
+      <div class="card-body">
+        <h5 class="card-title">
+          <p>{{nombre}}</p>
+        </h5>
+        <details>
+          <summary>Más información</summary>
+          <p>{{descripcion}}</p>
+        </details>
+
+        <br>
+        <br>
+
+        <p class="card-text" style="float: left;">
+          <i class="icon-calendar"></i>&nbsp;&nbsp;{{fecha}}
+        </p>
+        <p class="card-text" style="float: right;">
+          <i class="icon-user"></i>&nbsp;&nbsp;{{nombreCompleto}}
+        </p>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+
+  <div align="center">
+    <img src="/static/img/sin-cursos.png" style="width: 250px; height: auto;" alt="No hay cursos">
+    <br><br>
+    <h5>Aún no hay cursos</h5>
+  </div>
+
+  {{/ifgt}}
+
+</section>
+
+{{> footer }}

@@ -3,14 +3,30 @@ const cors = require('cors');
 const sharp = require('sharp');
 const app= express();
 const Swal = require('sweetalert2')
-
+const jwt = require("jsonwebtoken");
+const { promisify } = require('util')
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
+async function verifytoken(req, res, next) {
+
+    if (req.cookies.jwt) {
+        const decodificada = await promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+        console.log(decodificada)
+
+        req.token = decodificada;
+        console.log(req.token.user)
+        //req.user = results[0];
+        next();
+    } else {
+        res.redirect('/')
+    }
+}
+
 function crearCurso(req, res) {
-    res.render("curso/crearCurso");
+    res.render("curso/crearCurso", {sesion: req.token.user});
 }
 function editarCurso(req, res) {
     var id = req.params.id;
@@ -77,8 +93,8 @@ function misCursos(req, res) {
    
         });
     });
-  
 }
+
 
 function upload(req, res) {
     var nombreImagen = "";
@@ -89,10 +105,10 @@ function upload(req, res) {
     
     req.getConnection((err, conn) => {
         conn.query(`INSERT INTO tblcurso (nombre, descripcion, estatus, fechaRegistro, cantidadUsuarios, rutaImagen,cveUsuario) 
-        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',${req.session.cveUsuario} )`, (err2, rows) => {
-            usuario = req.session.cveUsuario;
+        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',6 )`, (err2, rows) => {
+            usuario = req.token.user.cveUsuario;
                 console.log(usuario);
-                res.render('curso/crearCurso',{alert:true});
+                res.render('curso/crearCurso',{alert:true, sesion: req.token.user});
 
         });
     });
@@ -119,6 +135,7 @@ function modificarCurso(req, res) {
         
     });
     console.log(req.session.cveUsuario);
+    console.log(req.token.user.cveUsuario);
 }
 
 function agregarSeccion(req, res) {
@@ -467,7 +484,6 @@ function agregarTeoria(req, res){
 }
 module.exports = {
     crearCurso,
-    misCursos,
     editarTema,
     editarCurso,
     upload,
@@ -483,5 +499,6 @@ module.exports = {
     agregarMaterial,
     eliminarMaterial,
     borrarMaterial,
-    agregarTeoria
+    agregarTeoria,
+    verifytoken
 }
