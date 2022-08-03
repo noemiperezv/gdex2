@@ -14,7 +14,20 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 router.get('/', cursoController.verifytoken, cursoController.crearCurso);
-router.get('/editarTema', cursoController.verifytoken, cursoController.editarTema);
+router.post('/editarTema', cursoController.verifytoken, cursoController.editarTema);
 router.get('/editarCurso', cursoController.verifytoken, cursoController.editarCurso);
 router.post('/upload', cursoController.verifytoken, upload.single('imagen'),cursoController.upload);
+router.post('/modificarCurso', cursoController.verifytoken, upload.single('imagen'),cursoController.modificarCurso);
+router.post('/agregarSeccion', cursoController.verifytoken, cursoController.agregarSeccion);
+router.post('/filtrarTemas', cursoController.verifytoken, cursoController.filtrarTemas);
+router.post('/agregarTema', cursoController.verifytoken, cursoController.agregarTema);
+router.post('/eliminarSeccion', cursoController.verifytoken, cursoController.eliminarSeccion);
+router.get('/borrarSeccion/:id', cursoController.verifytoken, cursoController.borrarSeccion);
+router.post('/eliminarTema', cursoController.verifytoken, cursoController.eliminarTema);
+router.get('/borrarTema/:id', cursoController.verifytoken, cursoController.borrarTema);
+router.post('/modificarTema', cursoController.verifytoken, cursoController.modificarTema);
+router.post('/agregarMaterial', cursoController.verifytoken, upload.single('archivo'),cursoController.agregarMaterial);
+router.post('/eliminarMaterial', cursoController.verifytoken, cursoController.eliminarMaterial);
+router.get('/borrarMaterial/:id', cursoController.verifytoken, cursoController.borrarMaterial);
+router.post('/agregarTeoria', cursoController.verifytoken, cursoController.agregarTeoria);
 module.exports = router;

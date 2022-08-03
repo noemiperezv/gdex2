@@ -715,6 +715,89 @@ td {
   color:blue;
 }
 
+.imagen{
+  margin: 5%;
+  text-align: center;
+  
+}
+
+.img-actual{
+  width: auto;
+  height: 300px;
+}
+
+.desc{
+  text-align: justify;
+}
+
+.contenedor-secciones{
+  padding: 5%;
+  border: solid 2px gray;
+  border-radius: 10px;
+}
+
+.tabla-secciones{
+  border: solid 2px gray;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #E1EEF4;
+}
+
+.recuadro{
+  border: solid 1px black;
+  border-radius: 20px;
+  margin: 5px;
+}
+
+.margen{
+  margin: 10px;
+}
+
+.separado{
+  margin-top:10px;
+}
+
+.none{
+  text-decoration: none;
+  border-color:white !important;
+}
+
+.modalv {
+  visibility: visible;
+  opacity: 1;
+}
+
+.centro{
+  margin-top: 2%;
+  margin-bottom:2%;
+}
+
+.table-striped tbody tr:nth-of-type(odd){
+  background-color: white;
+ }
+ .table-hover tbody tr:hover{
+  background-color: rgba(122,114,81, 0.7);
+  color: #1F618D;
+ }
+ .thead-green{
+  background-color: #00496B;
+  color: white;
+ }
+
+ .redondeado{
+  border-radius: 10px;
+  border-color: #2E4053;
+  column-rule-color: #acdfe7;
+ }
+
+ .justificado{
+  text-align: justify;
+ }
 
 /* FOOTER */
 a {
