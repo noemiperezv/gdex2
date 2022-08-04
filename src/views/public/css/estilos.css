@@ -696,7 +696,7 @@ td {
   }
 }
 
-/*editCurso*/
+/*editarCurso*/
 .cursos_links_editar:hover {
   color: blue;
 }
@@ -713,6 +713,14 @@ td {
 .black{
   border: solid 2px gray !important;
   color:blue;
+  padding-bottom: 10px !important;
+  margin-bottom: 5px !important;
+  height: 45px !important;
+}
+
+.black-2{
+  border: solid 2px gray !important;
+  color:blue;
 }
 
 .imagen{
@@ -722,8 +730,7 @@ td {
 }
 
 .img-actual{
-  width: auto;
-  height: 300px;
+  width: 400px;
 }
 
 .desc{
@@ -798,6 +805,12 @@ tbody tr:nth-child(even) {
  .justificado{
   text-align: justify;
  }
+
+ .list-group-item{
+  border: solid 1px gray !important;
+ }
+
+ /*FIN EDITAR CURSO*/
 
 /* FOOTER */
 a {

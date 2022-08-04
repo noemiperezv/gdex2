@@ -5,6 +5,7 @@ const app= express();
 const Swal = require('sweetalert2')
 const jwt = require("jsonwebtoken");
 const { promisify } = require('util')
+var cveCurso = "";
 
 app.use(cors());
 app.use(express.json());
@@ -28,15 +29,16 @@ async function verifytoken(req, res, next) {
 function crearCurso(req, res) {
     res.render("curso/crearCurso", {sesion: req.token.user});
 }
+
 function editarCurso(req, res) {
     var id = req.params.id;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = 21`, (err, cursodata) => {
+        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${id}`, (err, cursodata) => {
             if(err){
                 res.render(err)
             }else{
                 req.getConnection((err, conn) => {
-                    conn.query('SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = 21', (err, seccionesdata) => {
+                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ${id}`, (err, seccionesdata) => {
                         if(err){
                             res.render(err)
                         }else{
@@ -46,7 +48,7 @@ function editarCurso(req, res) {
                                         res.render(err)
                                     }else{
                                         
-                                        res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata, temasdata: temasdata})
+                                        res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata, temasdata: temasdata, sesion: req.token.user, cveCurso:id})
                                         console.log(temasdata);
                                     }
                                 });
@@ -63,13 +65,13 @@ function editarCurso(req, res) {
 function editarTema(req, res) {
     var cveTema = req.body.cveTema;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT cveTema, nombre, descripcion, teoria, rutaImagen FROM tblTema WHERE cveTema = ${cveTema}`, (error, temaData) => {
+        conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema = ${cveTema}`, (error, temaData) => {
             if(!error){
                 req.getConnection((err, conn) => {
                     conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
-                        if(!error){
+                        if(!err){
                             console.log("Se elimino el tema correctamente.");
-                            res.render('curso/editarTema',{temas:temaData, material:materialData})
+                            res.render('curso/editarTema',{temas:temaData, material:materialData, sesion: req.token.user})
                         }else{
                             console.log(error);
                         }
@@ -82,33 +84,20 @@ function editarTema(req, res) {
     });
 }
 
-function misCursos(req, res) {
-    req.getConnection((err, conn) => {
-        conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario WHERE u.cveUsuario = 1', (err, miscursosdata) => {
-            if(err){
-                res.render(err)
-            }else{
-                res.render("curso/miscursos", {miscursos: miscursosdata})
-            }
-   
-        });
-    });
-}
-
-
 function upload(req, res) {
     var nombreImagen = "";
     
      if(req.file != null || require.file != undefined) {
         nombreImagen = req.file.filename;
      }
-    
+    usuario = req.token.user.cveUsuario;
     req.getConnection((err, conn) => {
         conn.query(`INSERT INTO tblcurso (nombre, descripcion, estatus, fechaRegistro, cantidadUsuarios, rutaImagen,cveUsuario) 
-        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',6 )`, (err2, rows) => {
-            usuario = req.token.user.cveUsuario;
+        values ('${req.body.nameCurso}', '${req.body.descripcion}', 1, CURDATE(), 0, '${nombreImagen}',${usuario} )`, (err2, rows) => {
+            
                 console.log(usuario);
                 res.render('curso/crearCurso',{alert:true, sesion: req.token.user});
+                console.log(usuario);
 
         });
     });
@@ -127,9 +116,9 @@ function modificarCurso(req, res) {
                 usuario = req.session.cveUsuario;
                 console.log(resultado);
                 console.log(error);
-                res.render('curso/editarCurso',{seccion:true});
+                res.render('curso/editarCurso',{seccion:true, sesion: req.token.user, cveCurso:req.body.cveCurso});
             }else{
-                res.render('curso/editarCurso',{error_seccion:true});
+                res.render('curso/editarCurso',{error_seccion:true, sesion: req.token.user, cveCurso:req.body.cveCurso});
             }
         });
         
@@ -148,24 +137,24 @@ function agregarSeccion(req, res) {
         values ('${nombre}', ${estatus}, CURDATE(), '${cveCurso}')`, (error, rows) => {
             if(!error){
                 usuario = req.session.cveUsuario;
-                res.render('curso/editarCurso',{seccion:true});
+                res.render('curso/editarCurso',{seccion:true, sesion: req.token.user, cveCurso: cveCurso});
             }else{
                 usuario = req.session.cveUsuario;
-                res.render('curso/editarCurso',{error_seccion:true});
+                res.render('curso/editarCurso',{error_seccion:true, sesion: req.token.user, cveCurso: cveCurso});
             }
         });
     });
 }
 
 function filtrarTemas(req, res) {
-    console.log(req.body);
+    var cveCurso = req.body.cveCurso;
     req.getConnection((err, conn) => {
-        conn.query('SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = 21', (err, cursodata) => {
+        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${cveCurso}`, (err, cursodata) => {
             if(err){
                 res.render(err)
             }else{
                 req.getConnection((err, conn) => {
-                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = '${req.body.idCurso}'`, (err, seccionesdata) => {
+                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = '${cveCurso}'`, (err, seccionesdata) => {
                         if(err){
                             res.render(err)
                         }else{
@@ -174,9 +163,9 @@ function filtrarTemas(req, res) {
                                     if(err){
                                         res.render(err)
                                     }else{
-                                        res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata, temasdata: temasdata, cveSeccion: req.body.idSeccion})
+                                        res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata, temasdata: temasdata, cveSeccion: req.body.idSeccion, sesion: req.token.user, cveCurso:cveCurso, cveSeccion:req.body.idSeccion})
                                         console.log(temasdata);
-                                        console.log(req.body.idSeccion);
+                                        console.log(seccionesdata[1]);
                                     }
                                 });
                             });
@@ -190,36 +179,68 @@ function filtrarTemas(req, res) {
 }
 
 function agregarTema(req, res) {
+    var cveCurso = req.body.cveCurso;
     var nombre = req.body.nombreTema;
     var estatus = 1;
     var cveSeccion = req.body.cveSeccion;
+
+    console.log("Clave de sección:"+cveSeccion)
+    console.log("Otra clave de seccion"+req.body.cveSeccion)
 
     req.getConnection((err, conn) => {
         conn.query(`INSERT INTO tbltema (nombre, estatus, fechaRegistro, cveSeccion) 
         values ('${nombre}', ${estatus}, CURDATE(), '${cveSeccion}')`, (error, rows) => {
             if(!error){
-                usuario = req.session.cveUsuario;
-                res.render('curso/editarCurso',{seccion:true});
+                req.getConnection((err, conn) => {
+                    conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${cveCurso}`, (error, cursodata) => {
+                        if(!err){
+                            req.getConnection((err, conn) => {
+                                conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ${cveCurso}`, (error, seccionesdata) => {
+                                    if(!err){
+                                        req.getConnection((err, conn) => {
+                                            conn.query(`SELECT cveTema, nombre as  nombreTema, descripcion, estatus, rutaImagen,cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha FROM tbltema WHERE cveSeccion = ${cveSeccion}`, (error, temasdata) => {
+                                                if(!err){
+                                                    usuario = req.session.cveUsuario;
+                                                    res.render('curso/editarCurso',{tema:true, sesion: req.token.user, cveCurso: cveCurso, cveSeccion: cveSeccion, secciones: seccionesdata, miscursos: cursodata, temasdata: temasdata});
+                                                    console.log("Clave de sección final: " + cveSeccion);
+                                                }else{
+                                                    console.log(error);
+                                                }
+                                            });
+                                        }); 
+                                    }else{
+                                        console.log(error);
+                                    }
+                                });
+                            }); 
+                        }else{
+                            console.log(error);
+                        }
+                    });
+                }); 
+                
             }else{
                 usuario = req.session.cveUsuario;
-                res.render('curso/editarCurso',{error_seccion:true});
+                res.render('curso/editarCurso',{error_seccion:true, sesion: req.token.user, idCurso:id, cveCurso: cveCurso, cveSeccion: cveSeccion});
+                console.log("Clave de sección final: "+cveSeccion);
             }
         });
     });
 }
 
 function eliminarSeccion(req, res) {
+    var cveCurso = req.body.cveCurso;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${req.body.cveCurso}`, (err, cursodata) => {
+        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${cveCurso}`, (err, cursodata) => {
             if(err){
                 res.render(err)
             }else{
                 req.getConnection((err, conn) => {
-                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ${req.body.cveCurso}`, (err, seccionesdata) => {
+                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ${cveCurso}`, (err, seccionesdata) => {
                         if(err){
                             res.render(err)
                         }else{
-                            res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata,eliminarSeccion:true, cveSeccion:req.body.cveSeccionEliminar})
+                            res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata,eliminarSeccion:true, cveSeccion:req.body.cveSeccionEliminar, sesion: req.token.user, cveCurso: cveCurso})
                         }
                     });
                 });
@@ -231,37 +252,77 @@ function eliminarSeccion(req, res) {
 
 function borrarSeccion(req, res) {
     var id = req.params.id;
-    console.log("Mi id:"+req.params.id);
     req.getConnection((err, conn) => {
-        conn.query(`SELECT cveTema FROM tblTema WHERE cveSeccion = ${id}`, (error, rows) => {
-            if(!error){
-                rows.forEach(element => {
-                    console.log(element.cveTema);
+        conn.query(`SELECT tc.cveCurso, ts.cveSeccion FROM tblSeccion ts inner join tblCurso tc on ts.cveCurso = tc.cveCurso WHERE cveSeccion = ${id}`, (err, data) => {
+            if(err){
+                res.render(err)
+            }else{
+                data.forEach(element => {
+                    cveCurso = element.cveCurso;
+
                     req.getConnection((err, conn) => {
-                        conn.query(`DELETE FROM tblTema WHERE cveTema = ${element.cveTema}`, (error, rows) => {
+                        conn.query(`SELECT cveTema FROM tblTema WHERE cveSeccion = ${id}`, (error, rows) => {
                             if(!error){
-                                console.log("Se elimino correctamente.");
+                                rows.forEach(element => {
+                                    req.getConnection((err, conn) => {
+                                        conn.query(`DELETE FROM tblMaterial WHERE cveTema = ${element.cveTema}`, (error2, rows) => {
+                                            if(!error2){
+                                                console.log("Se elimino el material correctamente.");
+                                                req.getConnection((err, conn) => {
+                                                    conn.query(`DELETE FROM tblTema WHERE cveTema = ${element.cveTema}`, (error, rows) => {
+                                                        if(!err){
+                                                            console.log("Se elimino el tema correctamente correctamente.");
+                                                        }else{
+                                                            console.log("Este es el error de tema:"+error);
+                                                        }
+                                                    });
+                                                });
+                                            }else{
+                                                console.log("Este es el error de material:"+error);
+                                            }
+                                        });
+                                    });
+                                    console.log(element.cveTema);
+                                });
+                                req.getConnection((err, conn) => {
+                                    conn.query(`DELETE FROM tblSeccion WHERE cveSeccion = ${id}`, (error, rows) => {
+                                        if(!err){
+                                            console.log("Se elimino la sección correctamente.");
+                                        }else{
+                                            console.log(error);
+                                        }
+                                    });
+                                });  
                             }else{
                                 console.log(error);
                             }
                         });
                     });
-                });
-            }else{
-                console.log(error);
+
+                })
+                console.log(data);
+                req.getConnection((err, conn) => {
+                    conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${cveCurso}`, (error, cursodata) => {
+                        if(!error){
+                            req.getConnection((err, conn) => {
+                                conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ${cveCurso}`, (error, seccionesdata) => {
+                                    if(!err){
+                                        res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata, sesion: req.token.user, cveCurso:cveCurso})
+                                    }else{
+                                        console.log(error);
+                                    }
+                                });
+                            }); 
+                        }else{
+                            console.log(error);
+                        }
+                    });
+                }); 
             }
+   
         });
     });
-
-    req.getConnection((err, conn) => {
-        conn.query(`DELETE FROM tblSeccion WHERE cveSeccion = ${id}`, (error, rows) => {
-            if(!error){
-                console.log("Se elimino la sección correctamente.");
-            }else{
-                console.log(error);
-            }
-        });
-    });  
+    
 }
 
 function eliminarTema (req, res) {
@@ -282,7 +343,7 @@ function eliminarTema (req, res) {
                                         if(err){
                                             res.render(err)
                                         }else{
-                                            res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata,eliminarTema:true, cveTema:req.body.cveTema})
+                                            res.render("curso/editarCurso", {secciones: seccionesdata, miscursos: cursodata,eliminarTema:true, cveTema:req.body.cveTema, sesion: req.token.user, cveCurso:element.cveCurso})
                                         }
                                     });
                                 });
@@ -300,6 +361,17 @@ function eliminarTema (req, res) {
 
 function borrarTema (req, res) {
     var id = req.params.id;
+
+    req.getConnection((err, conn) => {
+        conn.query(`SELECT tc.cveCurso, ts.cveSeccion FROM tblTema tt inner join tblSeccion ts on tt.cveSeccion = ts.cveSeccion inner join tblCurso tc on ts.cveCurso = tc.cveCurso WHERE cveTema = = ${id}`, (error, rows) => {
+            if(!err){
+                console.log("Se elimino la sección correctamente.");
+            }else{
+                console.log(error);
+            }
+        });
+    }); 
+
     req.getConnection((err, conn) => {
         conn.query(`DELETE FROM tblMaterial WHERE cveTema = ${id}`, (error, rows) => {
             if(!error){
@@ -326,13 +398,13 @@ function modificarTema(req, res){
     conn.query(`UPDATE tblTema SET nombre = '${nombre}' WHERE cveTema = ${cveTema}`, (error, rows) => {
         if(!error){
             req.getConnection((err, conn) => {
-                conn.query(`SELECT cveTema, nombre, descripcion, teoria, rutaImagen FROM tblTema WHERE cveTema = ${cveTema}`, (error, temaData) => {
+                conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema =  ${cveTema}`, (error, temaData) => {
                     if(!error){
                         req.getConnection((err, conn) => {
                             conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
                                 if(!error){
                                     console.log("Se elimino el tema correctamente.");
-                                    res.render('curso/editarTema',{cambioTema:true, temas:temaData, material:materialData})
+                                    res.render('curso/editarTema',{cambioTema:true, temas:temaData, material:materialData, sesion: req.token.user})
                                 }else{
                                     console.log(error);
                                 }
@@ -365,13 +437,13 @@ function agregarMaterial(req, res){
         values ('${nombreArchivo}', CURDATE(), ${cveTema})`, (err, rows) => {
             if(!err){
                 req.getConnection((err, conn) => {
-                    conn.query(`SELECT cveTema, nombre, descripcion, teoria, rutaImagen FROM tblTema WHERE cveTema = ${cveTema}`, (error, temaData) => {
+                    conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema = ${cveTema}`, (error, temaData) => {
                         if(!err){
                             req.getConnection((err, conn) => {
                                 conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
                                     if(!err){
                                         console.log("Se agrego el material de manera correcta.");
-                                        res.render('curso/editarTema',{agregarMaterial:true, temas:temaData, material:materialData})
+                                        res.render('curso/editarTema',{agregarMaterial:true, temas:temaData, material:materialData, sesion: req.token.user})
                                     }else{
                                         console.log(err);
                                     }
@@ -395,7 +467,7 @@ function eliminarMaterial(req, res){
     var cveMaterial = req.body.cveMaterial;
     var cveTema = req.body.cveTema;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT cveTema, nombre, descripcion, teoria, rutaImagen FROM tblTema WHERE cveTema = ${cveTema}`, (err, temaData) => {
+        conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema =  ${cveTema}`, (err, temaData) => {
             if(err){
                 res.render(err)
             }else{
@@ -405,7 +477,7 @@ function eliminarMaterial(req, res){
                             if(err){
                                 res.render(err)
                             }else{
-                                res.render("curso/editarTema", {material:materialData, temas:temaData,eliminarMaterial:true, cveTema:cveTema, cveMaterial:cveMaterial})
+                                res.render("curso/editarTema", {material:materialData, temas:temaData,eliminarMaterial:true, cveTema:cveTema, cveMaterial:cveMaterial, sesion: req.token.user})
                             }
                    
                         });
@@ -420,7 +492,7 @@ function eliminarMaterial(req, res){
 function borrarMaterial(req, res){
     var id = req.params.id;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT tm.cveTema, tt.nombre, tt.teoria FROM tblMaterial tm inner join tblTema tt On tm.cveTema = tt.cveTema WHERE cveMaterial = ${id}`, (err, temaData) => {
+        conn.query(`SELECT tt.cveTema as cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblMaterial tm INNER JOIN tblTema tt ON tm.cveTema = tt.cveTema INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveMaterial =  ${id}`, (err, temaData) => {
             if(err){
                 console.log(err)
             }else{
@@ -435,10 +507,12 @@ function borrarMaterial(req, res){
                 temaData.forEach(element => {
                     req.getConnection((err, conn) => {
                         conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${element.cveTema}`, (err, materialData) => {
+                            console.log(element.cveTema)
+                            console.log(materialData)
                             if(err){
                                 res.render(err)
                             }else{
-                                res.render("curso/editarTema", {material:materialData, temas:temaData,cveTema:element.cveTema})
+                                res.render("curso/editarTema", {material:materialData, temas:temaData,cveTema:element.cveTema, sesion: req.token.user})
                             }
                         });
                     });
@@ -465,11 +539,11 @@ function agregarTeoria(req, res){
                             res.render(err)
                         }else{
                             req.getConnection((err, conn) => {
-                                conn.query(`SELECT cveTema, nombre, teoria FROM tblTema WHERE cveTema = ${cveTema}`, (err, temaData) => {
+                                conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema =  ${cveTema}`, (err, temaData) => {
                                     if(err){
                                         res.render(err)
                                     }else{
-                                        res.render("curso/editarTema", {material:materialData, temas:temaData,cveTema:cveTema})
+                                        res.render("curso/editarTema", {material:materialData, temas:temaData,cveTema:cveTema, sesion: req.token.user})
                                     }
                                 });
                             });
@@ -479,9 +553,8 @@ function agregarTeoria(req, res){
             }
         });
     });
-
-
 }
+
 module.exports = {
     crearCurso,
     editarTema,
