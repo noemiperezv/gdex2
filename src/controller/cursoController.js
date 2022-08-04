@@ -116,7 +116,7 @@ function modificarCurso(req, res) {
                 usuario = req.session.cveUsuario;
                 console.log(resultado);
                 console.log(error);
-                res.render('curso/editarCurso',{seccion:true, sesion: req.token.user, cveCurso:req.body.cveCurso});
+                res.render('curso/editarCurso',{curso:true, sesion: req.token.user, cveCurso:req.body.cveCurso});
             }else{
                 res.render('curso/editarCurso',{error_seccion:true, sesion: req.token.user, cveCurso:req.body.cveCurso});
             }
