@@ -73,7 +73,7 @@
                         <div class="container centro">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <input type="file" class="form-control black" name="archivo" id="">
+                                    <input type="file" class="form-control black" name="archivo" id="" required>
                                 {{#each temas}}
                                     <input type="text" class="form-control" name="cveTema" id="" value="{{cveTema}}" hidden>
                                 </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="flex">
                         {{#each temas}}
-                        <a type="button" class="btn btn-danger" href="../editarCurso/:{{cveTema}}">Cancelar</a>
+                        <a type="button" class="btn btn-danger" href="/curso/editarCurso/{{cveCurso}}">Cancelar</a>
                         {{/each}}
                         <button type="submit" class="btn btn-success">
                             Guardar
@@ -146,7 +146,7 @@
             confirmButtonText: '¡Si, eliminarlo!'
             }).then((result) => {
             if (result.isConfirmed) {
-                window.location = '../curso/borrarMaterial/{{cveMaterial}}';
+                window.location = '/curso/borrarMaterial/{{cveMaterial}}';
                 Swal.fire(
                 'Borrado!',
                 'El tema ha sido eliminado.',

@@ -8,14 +8,15 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb)=>{
         const ext = file.originalname.split('.').pop();
-        cb(null, `${Date.now()}.${ext}`);
+        const nom = file.originalname.split('.').reverse().pop();
+        cb(null, `${nom}${Date.now()}.${ext}`);
     }
 });
 const upload = multer({storage});
 
 router.get('/', cursoController.verifytoken, cursoController.crearCurso);
 router.post('/editarTema', cursoController.verifytoken, cursoController.editarTema);
-router.get('/editarCurso', cursoController.verifytoken, cursoController.editarCurso);
+router.get('/editarCurso/:id', cursoController.verifytoken, cursoController.editarCurso);
 router.post('/upload', cursoController.verifytoken, upload.single('imagen'),cursoController.upload);
 router.post('/modificarCurso', cursoController.verifytoken, upload.single('imagen'),cursoController.modificarCurso);
 router.post('/agregarSeccion', cursoController.verifytoken, cursoController.agregarSeccion);

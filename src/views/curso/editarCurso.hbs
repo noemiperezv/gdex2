@@ -11,8 +11,8 @@
                 Modificar Curso
             </button>
         </div>
-        <div class="crearCursoForms">
-            <div class="marco contenedor-secciones">
+        <div class="crearCursoForms row justify-content-center">
+            <div class="marco contenedor-secciones col-md-5">
                 <div class="centrar">
                     Secciones
                 </div>
@@ -20,14 +20,14 @@
                     <div class="row">
                         {{#each secciones}}
                         <div class="col-md-9">
-                            <form action="../curso/filtrarTemas" method="post">
-                                <input type="text" name="idCurso" value='{{cveCurso}}' hidden>
+                            <form action="/curso/filtrarTemas" method="post">
+                                <input type="text" name="cveCurso" value='{{cveCurso}}' hidden>
                                 <input type="text" name="idSeccion"  value='{{cveSeccion}}' hidden>
                                 <button class="btn btn-outline-primary btn-block" id="contenido-tab" type="submit" aria-selected="true">{{nombre}}</button>
                             </form>
                         </div>
                         <div class="col-md-2">
-                            <form action="../curso/eliminarSeccion" method="post">
+                            <form action="/curso/eliminarSeccion" method="post">
                                 <input type="text" name="cveSeccionEliminar" value='{{cveSeccion}}' hidden>
                                 <input type="text" name="cveCurso" value='{{cveCurso}}' hidden>
                                 <button class="btn btn-outline-danger none" type="submit" aria-selected="true"><i class="icon-trash icon-2x" style="color: #f73a06;"></i></button>
@@ -37,44 +37,45 @@
                     </div>
                 <hr class="line">
                 <div class="addTemaSeccion">
-                    <form action="../curso/agregarSeccion" method="post">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <input class="form-control black" type="text" id="nameCurso" name="nombreSeccion" required>
+                    <form action="/curso/agregarSeccion" method="post">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <input class="form-control black" type="text" id="nameCurso" name="nombreSeccion" required>
+                                </div>
+                                <div class="form-group">
+                                    {{#each miscursos}}
+                                    <input type="text" value="{{cveCurso}}" name="cveCurso" hidden>
+                                    {{/each}}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                {{#each miscursos}}
-                                <input type="text" value="{{cveCurso}}" name="cveCurso" hidden>
-                                {{/each}}
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">
+                                    Agregar sección
+                                </button>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary">
-                                Agregar sección
-                            </button>
-                        </div>
-                    </div>
                     </form>
                 </div>
             </div>
-            <div class="marco contenedor-secciones">
+            {{#if cveSeccion}}
+            <div class="marco contenedor-secciones col-md-5">
                 <div class="centrar">
                     Temas de sección
                 </div>
                 <hr class="line">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-8">
                             <ul class="list-group">
                                 {{#each temasdata}}
                                     <li class="list-group-item">{{nombreTema}}</li>
                                 {{/each}}
                             </ul>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             {{#each temasdata}}
-                                <form action="../curso/eliminarTema" method="post">
+                                <form action="/curso/eliminarTema" method="post">
                                     <input type="text" name="cveTema" value='{{cveTema}}' hidden>
                                     <input type="text" name="cveSeccion" value='{{cveSeccion}}' hidden>
                                     <button class="btn btn-outline-danger none" type="submit" aria-selected="true"><i class="icon-trash icon-2x" style="color: #f73a06;"></i></button>
@@ -83,7 +84,7 @@
                         </div>
                         <div class="col-md-1">
                             {{#each temasdata}}
-                            <form action="../curso/editarTema" method="post">
+                            <form action="/curso/editarTema" method="post">
                                 <input type="text" name="cveTema" value='{{cveTema}}' hidden>
                                 <input type="text" name="cveSeccion" value='{{cveSeccion}}' hidden>
                                 <button type="submit" class="btn btn-outline-success none">
@@ -95,9 +96,8 @@
                     </div>
                 </div>
                 <hr class="line">
-                {{#if cveSeccion}}
                 <div class="addTemaSeccion">
-                    <form action="../curso/agregarTema" method="post">
+                    <form action="/curso/agregarTema" method="post">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
@@ -105,6 +105,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control black" type="text" id="cveSeccion" name="cveSeccion" value="{{cveSeccion}}" hidden>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control black" type="text" id="cveCurso" name="cveCurso" value="{{cveCurso}}" hidden>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -115,11 +118,11 @@
                         </div>
                     </form>
                 </div>
-                {{/if}}
             </div>
+            {{/if}}
         </div>
-</div>
-    </main>
+    </div>
+</main>
     <!-- Modal para editar los campos de un curso-->
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -132,7 +135,7 @@
                 </div>
                 <div class="modal-body">
                     {{#each miscursos}}
-                    <form class="form" action="../curso/modificarCurso" method="post" enctype="multipart/form-data">
+                    <form class="form" action="/curso/modificarCurso" method="post" enctype="multipart/form-data">
                         <h1 class="centrar">Editar curso</h1>
                         <div>
                         <div class="formCrearCurso">
@@ -162,7 +165,7 @@
                                         <input class="btn btn-danger btn-block" type="button" name="btnCancelar" id="btnCancelar" value="Cancelar" data-dismiss="modal"> 
                                     </div>
                                     <div class="col-md-6">
-                                        <input class="btn btn-primary btn-block" type="submit" name="btnCrearCurso" id="btnCrearCurso" value="Crear">
+                                        <input class="btn btn-primary btn-block" type="submit" name="btnCrearCurso" id="btnCrearCurso" value="Guardar">
                                     </div>
                                 </div>
                             </div> 
@@ -175,6 +178,18 @@
     </div>
     {{> scripts}}
 <!-- Mensajes de Alerta-->
+    {{#if curso }}
+        <script>
+            Swal.fire({
+                title: "El curso se ha modificado correctamente!",
+                icon:"success",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+                window.location = "/curso/editarCurso/{{cveCurso}}";
+            });
+        </script>
+    {{/if}}
     {{#if seccion }}
         <script>
             Swal.fire({
@@ -183,10 +198,11 @@
                 type: "success",
                 showConfirmButton: true
             }).then(function() {
-                window.location = "/curso/editarCurso";
+                window.location = "/curso/editarCurso/{{cveCurso}}";
             });
         </script>
     {{/if}}
+
     {{#if error_seccion}}
         <script>
             Swal.fire({
@@ -195,10 +211,23 @@
                 type: "success",
                 showConfirmButton: true
             }).then(function() {
-                window.location = "/curso/editarCurso";
+                window.location = "/curso/editarCurso/{{cveCurso}}";
             });
         </script>
     {{/if}}
+
+    {{#if tema }}
+        <script>
+            Swal.fire({
+                title: "El tema se ha agregado correctamente!",
+                icon:"success",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+            });
+        </script>
+    {{/if}}
+
     {{#if eliminarSeccion}}
         <script>
             Swal.fire({
@@ -212,7 +241,7 @@
             confirmButtonText: '¡Si, eliminarla!'
             }).then((result) => {
             if (result.isConfirmed) {
-                window.location = '../curso/borrarSeccion/{{cveSeccion}}';
+                window.location = '/curso/borrarSeccion/{{cveSeccion}}';
                 Swal.fire(
                 'Borrada!',
                 'La sección ha sido eliminada.',
@@ -236,7 +265,7 @@
             confirmButtonText: '¡Si, eliminarlo!'
             }).then((result) => {
             if (result.isConfirmed) {
-                window.location = '../curso/borrarTema/{{cveTema}}';
+                window.location = '/curso/borrarTema/{{cveTema}}';
                 Swal.fire(
                 'Borrado!',
                 'El tema ha sido eliminado.',
