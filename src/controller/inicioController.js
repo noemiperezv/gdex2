@@ -156,6 +156,7 @@ function eliminarCurso(req, res) {
     });
 }
 
+
 module.exports = {
 
     inicio,
