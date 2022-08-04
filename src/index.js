@@ -58,7 +58,7 @@ app.use(myconnection(mysql, {
     host: 'localhost',
     user: 'root',
     password: '',
-    port: '3306',
+    port: '3309',
     database: 'gdex'
 }));
 //Uso de sesiones
