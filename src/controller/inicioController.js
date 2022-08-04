@@ -4,12 +4,13 @@ const { promisify } = require('util')
 function inicio(req, res) {
     req.getConnection((err, conn) => {
         conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen, concat_ws(" ", u.nombre, u.apellidos) AS nombreCompleto FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario', (err, cursosdata) => {
+            console.log('Este es el rol '+req.token.user.cveRol);
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/inicio", { cursos: cursosdata, sesion: req.token.user })
+                res.render("inicio/inicio", { cursos: cursosdata, sesion: req.token.user });
+                        
             }
-
         });
     });
 }
@@ -35,7 +36,13 @@ function misCursos(req, res) {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  })
+                if (req.token.user.cveRol != 1) { //Si no es instructor
+                    console.log('el rol del usuario es '+req.token.user.cveRol);
+                    res.render("error/error401");
+                }else{
+                    res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  });
+                } 
+                
             }
 
         });
@@ -49,9 +56,13 @@ function aprendiendo(req, res) {
                 if (err) {
                     res.render(err)
                 } else {
-                    res.render("inicio/aprendiendo", { aprendiendo: aprendiendodata, terminados: terminadosdata, sesion: req.token.user })
+                    if (req.token.user.cveRol != 2) { //Si no es instructor
+                        console.log('el rol del usuario es '+req.token.user.cveRol);
+                        res.render("error/error401");
+                    }else{
+                        res.render("inicio/aprendiendo", { aprendiendo: aprendiendodata, terminados: terminadosdata, sesion: req.token.user });
+                    }   
                 }
-
             });
         });
     });
@@ -74,7 +85,13 @@ function listarUsuarios(req, res) {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/usuarios", { sesion: req.token.user, usuarios: usuariosdata, flash: req.flash('message') });
+                if (req.token.user.cveRol != 3) { //Si no es admin
+                    console.log('el rol del usuario es '+req.token.user.cveRol);
+                    res.render("error/error401");
+                }else{
+                    res.render("inicio/usuarios", { sesion: req.token.user, usuarios: usuariosdata, flash: req.flash('message') });
+                } 
+                
             }
 
         });

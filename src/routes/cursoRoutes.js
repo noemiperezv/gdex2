@@ -32,3 +32,4 @@ router.post('/eliminarMaterial', cursoController.verifytoken, cursoController.el
 router.get('/borrarMaterial/:id', cursoController.verifytoken, cursoController.borrarMaterial);
 router.post('/agregarTeoria', cursoController.verifytoken, cursoController.agregarTeoria);
 module.exports = router;
+
