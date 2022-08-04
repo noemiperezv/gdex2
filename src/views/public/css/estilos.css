@@ -847,14 +847,7 @@ a {
     background-color: #004658;
     color: #fff;
 }
-.footer-wave-svg {
-    background-color: transparent;
-    display: block;
-    height: 30px;
-    position: relative;
-    top: -1px;
-    width: 100%;
-}
+
 .footer-wave-path {
     fill: #fff;
 }

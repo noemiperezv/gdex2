@@ -99,8 +99,9 @@ function seguirCurso(req, res) {
                         conn.query('SELECT cveSeccion, nombre from tblseccion WHERE cveCurso = ?', [idCurso], (err, secciones) => {
                             conn.query(`select tem.cveSeccion as secid, cur.cveCurso, tem.nombre as name, tem.cveTema as cveTem,  avete.estado as estate from tblusuario as us LEFT join tblestudiantecurso as estcur on estcur.cveUsuario = us.cveUsuario left join tblcurso as cur on cur.cveCurso = estcur.cveCurso left JOIN tblseccion as sec on sec.cveCurso= cur.cveCurso LEFT JOIN tbltema as tem on tem.cveSeccion = sec.cveSeccion LEFT JOIN tblavancetemas as avete on avete.cveTema = tem.cveTema and avete.cveUsuario= us.cveUsuario WHERE us.cveUsuario=  ${req.token.user.cveUsuario}   and cur.cveCurso = ?`, [idCurso], (err, temas) => {
                                 if (idTema == 'term') {
+                                    console.log(temas)
                                     res.render("inicio/seguirCurso", { sesion: req.token.user, dataCurso: secciones, tema: temas, cursoid: idCurso, felicidades: { nombre: 'Felicidades has terminado este curso' }, bandera: { bandera: 'fin' } });
-                                    console.log("siii")
+                                   
                                 } else {
                                     conn.query(`select cvetema, nombre, descripcion, tema from tbltema WHERE cveTema =  ?   `, [idTema], (err, temaActualdatos) => {
                                       

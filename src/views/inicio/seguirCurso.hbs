@@ -55,28 +55,7 @@
 <a onclick="openNav()" class="btn-flotante">
     < </a>
         <main id="contenido">
-            <!--
-            <div class="videoSeccion centrar">
-                <video width="80%" class="videoPlayer" controls>
-                     <source src="movie.mp4" type="video/mp4">
-                    <source src="movie.ogg" type="video/ogg">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="controles">
-                <div>
-                    Anterior
-                </div>
-                <div>
-
-                    Siguiente
-                </div>
-
-            </div>
-            -->
             <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
-
-
 
             {{#ifeq bandera.bandera 'fin'}}
             <div>
@@ -93,8 +72,8 @@
                 <p name="idtema" id="{{cvetema}}" hidden>{{cvetema}}</p>
 
 
-                <h2 class="centrar">Tema:               </h2>
-                     <h3 style="text-align: center ;">{{nombre}}</h3>
+                <h2 class="centrar">Tema: </h2>
+                <h3 style="text-align: center ;">{{nombre}}</h3>
             </div>
             <div>
                 <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
@@ -102,12 +81,12 @@
                 <p style="margin-left: 50px; margin-right: 50px;">{{descripcion}}</p>
 
             </div>
-                        <div>
+            <div>
                 <h2 class="centrar">Teoría</h2>
                 <hr class="line ">
                 <p>{{tema}}</p>
             </div>
-                        <div>
+            <div>
 
                 <h2 class="centrar">Material</h2>
                 <div style="padding-left: 33%; padding-right: 30% ;">
@@ -115,7 +94,8 @@
                     <ul style=" list-group border: 1px solid black;">
 
                         {{#each ../materiales}}
-                        <li class="list-group-item listItem"><a href="/static/{{rutaMaterial}}">{{nombreMaterial}}</a></li>
+                        <li class="list-group-item listItem"><a href="/static/{{rutaMaterial}}"
+                                download="{{nombreMaterial}}">{{nombreMaterial}}</a></li>
                         {{/each}}
 
                     </ul>
@@ -169,6 +149,7 @@
             </div>
 
         </div>
+         {{> footer }}
         <script src="/static/js/funciones.js"></script>
         <script>
 
@@ -322,4 +303,4 @@
 
         <script src="/static/js/jquery-3.6.0.js"></script>
 
-        {{> footer }}
+       

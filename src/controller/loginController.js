@@ -6,21 +6,33 @@ const { validationResult } = require('express-validator');
 
 
 function login(req, res) {
-    if (req.session.loggedin != true) {
-        //res.render('auth/index', {flash: req.flash('message')});
-        res.render('auth/index');
-    } else {
+    if (req.cookies.jwt) {
+
+        const decodificada =  promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+
+
+        req.token = decodificada;
+
         res.redirect('/inicio');
+    } else {
+        res.render('auth/index');
     }
 
 }
 
 function registrar(req, res) {
-    if (req.session.loggedin != true) {
-        res.render('auth/registrar');
-    } else {
+    if (req.cookies.jwt) {
+
+        const decodificada =  promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+
+
+        req.token = decodificada;
+
         res.redirect('/inicio');
+    } else {
+        res.render('auth/registrar');
     }
+
 }
 
 
@@ -143,10 +155,12 @@ function regUser(req, res) {
     }
 }
 
+
 module.exports = {
     login,
     registrar,
     logout,
     regUser,
-    auth
+    auth,
+    
 }
