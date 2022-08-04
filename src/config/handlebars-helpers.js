@@ -6,6 +6,12 @@ module.exports = {
         }
         return options.inverse(this);
     },
+    ifeq2num: function (a, b, options) {
+        if (a === parseInt(b)) {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    },
 
     ifgt: function (a, b, options) {
         if (a.length > b) {

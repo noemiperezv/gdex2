@@ -14,10 +14,10 @@ async function verifytoken(req, res, next) {
 
     if (req.cookies.jwt) {
         const decodificada = await promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
-        console.log(decodificada)
+        
 
         req.token = decodificada;
-        console.log(req.token.user)
+        
         //req.user = results[0];
         next();
     } else {

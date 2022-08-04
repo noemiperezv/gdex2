@@ -1,32 +1,54 @@
 {{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
+<p name="cveusuario" id="{{sesion.cveUsuario}}" hidden>{{sesion.cveUsuario}}</p>
 
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <div class="itemsSecciones">
-        <a href="#">ITEM 1</a>
-        <a href="#">ITEM 2</a>
-        <a href="#">ITEM 3</a>
-        <a href="#">ITEM 4</a>
-        <a href="#">ITEM 1</a>
-        <a href="#">ITEM 2</a>
-        <a href="#">ITEM 3</a>
-        <a href="#">ITEM 4</a>
-        <a href="#">ITEM 1</a>
-        <a href="#">ITEM 2</a>
-        <a href="#">ITEM 3</a>
-        <a href="#">ITEM 4</a>
-        <a href="#">ITEM 1</a>
-        <a href="#">ITEM 2</a>
-        <a href="#">ITEM 3</a>
-        <a href="#">ITEM 4</a>
-        <a href="#">ITEM 1</a>
-        <a href="#">ITEM 2</a>
-        <a href="#">ITEM 3</a>
-        <a href="#">ITEM 4</a>
-        <a href="#">ITEM 1</a>
-        <a href="#">ITEM 2</a>
-        <a href="#">ITEM 3</a>
-        <a href="#">ITEM 4</a>
+        {{#each dataCurso}}
+        {{cveCurso}}
+        <button class="accordion">{{nombre}}</button>
+        <div class="panel2" id="panel">
+
+            <ul style="padding: 0 0 0 0;">
+                {{#each ../tema}}
+                {{#ifeq ../cveSeccion secid}}
+                {{#ifeq estate 1}}
+
+                {{#ifeq2num cveTem ../../idTema}}
+
+                <a href="/inicio/seguirCurso/{{cveCurso}}/{{cveTem}}">
+                    <li
+                        style=" padding-left: 5px; background-color : lightgreen; padding-top: 10px; padding-bottom: 10px;">
+                        <input type="checkbox" name="terminado" id='{{cveTem}}' checked>
+
+                        {{else}}
+                        <a href="/inicio/seguirCurso/{{cveCurso}}/{{cveTem}}">
+                    <li style=" padding-left: 5px; padding-top: 10px; padding-bottom: 10px;"><input type="checkbox"
+                            name="terminado" id='{{cveTem}}' checked>
+                        {{/ifeq2num}}
+
+
+                        {{else}}
+                        {{#ifeq2num cveTem ../../idTema}}
+                        <a href="/inicio/seguirCurso/{{cveCurso}}/{{cveTem}}">
+                    <li style="  padding-left: 5px; color: lightgreen; padding-top: 10px; padding-bottom: 10px;"><input
+                            type="checkbox" name="terminado" id='{{cveTem}}'>
+
+                        {{else}}
+                        <a href="/inicio/seguirCurso/{{cveCurso}}/{{cveTem}}">
+                    <li style="  padding-left: 5px; padding-top: 10px; padding-bottom: 10px;"><input type="checkbox"
+                            name="terminado" id='{{cveTem}}'>
+                        {{/ifeq2num}}
+                        {{/ifeq}}
+                        {{name}} </li>
+                </a>
+                <hr style="margin-top: 0 !important; margin-bottom: 0 !important;">
+                {{/ifeq}}
+                {{/each}}
+            </ul>
+        </div>
+        {{/each}}
+
     </div>
 
 </div>
@@ -35,9 +57,9 @@
         <main id="contenido">
             <div class="videoSeccion centrar">
                 <video width="80%" class="videoPlayer" controls>
-                    <source src="movie.mp4" type="video/mp4">
+                    <!-- <source src="movie.mp4" type="video/mp4">
                     <source src="movie.ogg" type="video/ogg">
-                    Your browser does not support the video tag.
+                    Your browser does not support the video tag.-->
                 </video>
             </div>
             <div class="controles">
@@ -45,106 +67,234 @@
                     Anterior
                 </div>
                 <div>
+
                     Siguiente
                 </div>
 
             </div>
+            <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
+
+
+
+            {{#ifeq bandera.bandera 'fin'}}
             <div>
+                <h1 class="centrar"> {{felicidades.nombre}}</h1>
+            </div>
+            <p name="idtema" id="term" hidden>term</p>
+            {{else}}
+            {{#each temaActual}}
+            <div>
+
+                <p name="idtema" id="{{cvetema}}" hidden>{{cvetema}}</p>
+
+
+                <h2 class="centrar">Tema: {{nombre}}</h2>
+            </div>
+            <div>
+                <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
                 <h2 class="centrar">Descripción</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, quidem cumque aut dignissimos
-                    explicabo tempora enim velit dolorum quo eos saepe? Excepturi, fuga! Labore ratione saepe ad,
-                    dignissimos unde repellendus?</p>
+                <p style="margin-left: 50px; margin-right: 50px;">{{descripcion}}</p>
+
+            </div>
+            {{/each}}
+            <div>
+
+                <h2 class="centrar">Material</h2>
+                <div style="padding-left: 30%; padding-right: 30% ;">
+                    <ul style=" text-align: center; border: 1px solid black;">
+                        {{#each materiales}}
+                        <li><a href="/static/{{rutaMaterial}}">Material</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+
+
             </div>
             <div>
                 <h2 class="centrar">Comentarios</h2>
-                <hr class="line">
-
-                <div class="container-comments">
-
-                    <div class="comments">
-
-
-
-                        <div class="info-comments">
-
-                            <div class="headerComentario">
-
-                                <h4>Cristian Cedano</h4>
-                                <h5>25 noviembre 2017</h5>
-                            </div>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum voluptas reiciendis,
-                                hic voluptatibus maxime, delectus fugiat, aspernatur nisi saepe, temporibus nemo
-                                sequi sint pariatur ratione! Repellat tempora doloremque illo necessitatibus.</p>
-
-                            <div class="respuestaArea">
-
-                                <input type="text" class="inputRespuesta" placeholder="Responder">
-                                <input type="button" value="Responder">
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="container-comments-request">
-
-                    <div class="comments-request">
-
-
-                        <div class="info-comments-request">
-
-                            <div class="headerComentario">
-
-
-                                <h4>Cristian Cedano</h4>
-                                <h5>25 noviembre 2017</h5>
-                            </div>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum voluptas reiciendis,
-                                hic voluptatibus maxime, delectus fugiat, aspernatur nisi saepe, temporibus nemo
-                                sequi sint pariatur ratione! Repellat tempora doloremque illo necessitatibus.</p>
-
-                            <div class="respuestaArea">
-
-                                <input type="text" class="inputRespuesta" placeholder="Responder">
-                                <input type="button" value="Responder">
-
-                            </div>
-                        </div>
-
-                    </div>
-
+                <hr class="line ">
+                <div class="centrar" name="comments">
 
                 </div>
                 <div>
                     <hr class="line">
-                    <a href="#"><button id="myBtn"> Dejar un comentario</button></a>
-
+                    <button class="buttonest" onclick="comentar()">Dejar un comentario</button>
                 </div>
             </div>
+
+            {{/ifeq}}
+
         </main>
         <!-- The Modal -->
-        <div id="myModal" class="modal">
-
+        <div id="myModal" class="modal2">
             <!-- Modal content -->
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <label class="centrar">Comentar</label>
-
-
                 <div>
 
 
-                    <input class="modalComentario" type="text" placeholder="Deja tu comentario">
+                    <input class="modalComentario" name="Comentario" type="text" placeholder="Deja tu comentario">
                 </div>
                 <div class="btnsModal">
-                    <button class="btnCerrarModal">Cancelar</button>
-                    <button class="btnComentar">Comentar</button>
+                    <button class="btnCerrarModal buttonwarn">Cancelar</button>
+                    <button class="btnComentar buttonaccep btnCerrarModal2" name="comentar">Comentar</button>
 
                 </div>
             </div>
 
         </div>
+        <script src="/static/js/funciones.js"></script>
+        <script>
 
-{{> footer }}
+            const div = document.querySelector('div[name="comments"]');
+
+
+            function cargarComen() {
+
+                var idCurso = $(' p[name="cursoid"]').attr('id');
+                var idtema = $(' p[name="idtema"]').attr('id');
+                if (idtema == 'term') {
+                    console.log("Curso terminado")
+                } else {
+
+
+
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:3000/inicio/cargarComentarios/' + idCurso + '/' + idtema
+
+                    }).done(function (dataComentarios) {
+
+                        if (dataComentarios.length == 0) {
+                            div.innerHTML += '<h1>El tema actual no tiene comentarios</h1>'
+                        } else {
+
+
+                            $.ajax({
+                                type: 'GET',
+                                url: 'http://localhost:3000/inicio/cargarComentariosRespuestas/' + idCurso + '/' + idtema
+
+                            }).done(function (dataRespuestas) {
+
+                                dataComentarios.forEach(element => {
+
+
+                                    div.innerHTML += (`<div class="container-comments">
+                                                    <div class="comments">
+                                                    <div class="info-comments">
+
+                                <div class="headerComentario">
+
+                                    <h4>`+ element.nombre + `</h4>
+                                    <h5>`+ element.fecha + `</h5>
+                                </div>
+
+                                <p>` + element.comentario + `</p><div class="respuestaArea">
+                                    <input type="text" class="inputRespuesta" id="respuesta`+ element.cveComentario + `" placeholder="Responder">
+                                    <input type="button" class="buttonest" onclick="comentrespuesta(`+ element.cveComentario + `)" value="Responder"></div></div></div></div>`);
+                                    dataRespuestas.forEach(elementRes => {
+                                        if (element.cveComentario == elementRes.cveComentario) {
+                                            div.innerHTML += `<div class="container-comments-request">
+
+                        <div class="comments-request">
+
+
+                            <div class="info-comments-request">
+
+                                <div class="headerComentario">
+
+
+                                    <h4>`+ elementRes.nombre + `</h4>
+                                    <h5>`+ elementRes.fecha + `</h5>
+                                </div>
+
+                                <p>`+ elementRes.respuesta + `</p>
+
+                               
+                            </div>
+
+                        </div>
+
+
+                    </div>`
+                                        }
+
+
+                                    })
+                                })
+                            });
+                        }
+                    });
+                }
+            };
+            window.onload = cargarComen();
+            $(' input[name="terminado"]').mousedown(function () {
+
+                var id = $(this).attr('id');
+                var idCurso = $(' p[name="cursoid"]').attr('id');
+
+                if ($(this).attr('checked')) {
+                    var estado = 0;
+                } else {
+                    var estado = 1;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:3000/inicio/updateTemaAvance/' + estado + '/' + id + '/' + idCurso
+
+
+                }).done(function (data) {
+                    console.log(data); // imprimimos la respuesta
+                });
+
+            });
+
+            $('button[name="comentar"]').mousedown(function () {
+
+                var idtema = $(' p[name="idtema"]').attr('id');
+                var comentario = $('input[name="Comentario"]').val();
+                var idusuario = $('p[name="cveusuario"]').attr('id');
+                if (comentario.length == 0) {
+                    alert('ingrese un comentario');
+                    return false;
+                } else {
+
+
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:3000/inicio/insertarComentario/' + idtema + '/' + idusuario + '/' + comentario
+
+                    }).done(function (data) {
+                        div.innerHTML = ""
+                        cargarComen(); // imprimimos la respuesta
+                    });
+                }
+            });
+            function comentrespuesta(cveComentario) {
+                id = "respuesta" + cveComentario
+                var comentario = $('input[id="' + id + '"]').val();
+                var idusuario = $('p[name="cveusuario"]').attr('id');
+                if (comentario.length == 0) {
+                    alert('ingrese un comentario');
+                    return false;
+                } else {
+
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:3000/inicio/insertarComentarioRespuesta/' + cveComentario + '/' + idusuario + '/' + comentario
+
+                    }).done(function (data) {
+                        div.innerHTML = ""
+                        cargarComen(); // imprimimos la respuesta
+                    });
+                }
+            }
+
+        </script>
+
+
+        <script src="/static/js/jquery-3.6.0.js"></script>
+
+        {{> footer }}
