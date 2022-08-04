@@ -91,9 +91,9 @@ function seguirCurso(req, res) {
                                     res.render("inicio/seguirCurso", { sesion: req.token.user, dataCurso: secciones, tema: temas, cursoid: idCurso, felicidades: { nombre: 'Felicidades has terminado este curso' }, bandera: { bandera: 'fin' } });
                                     console.log("siii")
                                 } else {
-                                    conn.query(`select cvetema, nombre, descripcion from tbltema WHERE cveTema =  ?   `, [idTema], (err, temaActualdatos) => {
+                                    conn.query(`select cvetema, nombre, descripcion, tema from tbltema WHERE cveTema =  ?   `, [idTema], (err, temaActualdatos) => {
                                       
-                                        conn.query(`SELECT rutaMaterial FROM tblmaterial where cveTema = ? `, [idTema], (err, listaMaterial) => {
+                                        conn.query(`SELECT rutaMaterial, nombreMaterial FROM tblmaterial where cveTema = ? `, [idTema], (err, listaMaterial) => {
                                             
 
                                             res.render("inicio/seguirCurso", { sesion: req.token.user, dataCurso: secciones, tema: temas, cursoid: idCurso, temaActual: temaActualdatos, idTema: idTema, materiales: listaMaterial });

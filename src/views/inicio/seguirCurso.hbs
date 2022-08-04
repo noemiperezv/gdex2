@@ -55,11 +55,12 @@
 <a onclick="openNav()" class="btn-flotante">
     < </a>
         <main id="contenido">
+            <!--
             <div class="videoSeccion centrar">
                 <video width="80%" class="videoPlayer" controls>
-                    <!-- <source src="movie.mp4" type="video/mp4">
+                     <source src="movie.mp4" type="video/mp4">
                     <source src="movie.ogg" type="video/ogg">
-                    Your browser does not support the video tag.-->
+                    Your browser does not support the video tag.
                 </video>
             </div>
             <div class="controles">
@@ -72,6 +73,7 @@
                 </div>
 
             </div>
+            -->
             <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
 
 
@@ -85,10 +87,14 @@
             {{#each temaActual}}
             <div>
 
+            </div>
+            <div>
+
                 <p name="idtema" id="{{cvetema}}" hidden>{{cvetema}}</p>
 
 
-                <h2 class="centrar">Tema: {{nombre}}</h2>
+                <h2 class="centrar">Tema:               </h2>
+                     <h3 style="text-align: center ;">{{nombre}}</h3>
             </div>
             <div>
                 <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
@@ -96,20 +102,37 @@
                 <p style="margin-left: 50px; margin-right: 50px;">{{descripcion}}</p>
 
             </div>
-            {{/each}}
-            <div>
+                        <div>
+                <h2 class="centrar">Teoría</h2>
+                <hr class="line ">
+                <p>{{tema}}</p>
+            </div>
+                        <div>
 
                 <h2 class="centrar">Material</h2>
-                <div style="padding-left: 30%; padding-right: 30% ;">
-                    <ul style=" text-align: center; border: 1px solid black;">
-                        {{#each materiales}}
-                        <li><a href="/static/{{rutaMaterial}}">Material</a></li>
+                <div style="padding-left: 33%; padding-right: 30% ;">
+                    {{#if ../materiales}}
+                    <ul style=" list-group border: 1px solid black;">
+
+                        {{#each ../materiales}}
+                        <li class="list-group-item listItem"><a href="/static/{{rutaMaterial}}">{{nombreMaterial}}</a></li>
                         {{/each}}
+
                     </ul>
+                    {{else}}
+                    <div class="alert alert-danger" role="alert">
+                        Este tema no tiene materiales
+                    </div>
+
+                    {{/if}}
                 </div>
 
 
             </div>
+
+            {{/each}}
+
+
             <div>
                 <h2 class="centrar">Comentarios</h2>
                 <hr class="line ">
@@ -118,7 +141,9 @@
                 </div>
                 <div>
                     <hr class="line">
+
                     <button class="buttonest" onclick="comentar()">Dejar un comentario</button>
+
                 </div>
             </div>
 
@@ -167,7 +192,7 @@
                     }).done(function (dataComentarios) {
 
                         if (dataComentarios.length == 0) {
-                            div.innerHTML += '<h1>El tema actual no tiene comentarios</h1>'
+                            div.innerHTML += '<div class="alert alert-info" role="alert">El tema actual no tiene comentarios</div>'
                         } else {
 
 
