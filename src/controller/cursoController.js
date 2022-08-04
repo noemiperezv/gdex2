@@ -15,10 +15,7 @@ async function verifytoken(req, res, next) {
 
     if (req.cookies.jwt) {
         const decodificada = await promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
-        console.log(decodificada)
-
         req.token = decodificada;
-        console.log(req.token.user)
         //req.user = results[0];
         next();
     } else {
@@ -57,7 +54,6 @@ function editarCurso(req, res) {
                     });
                 });
             }
-   
         });
     });
 }
@@ -68,7 +64,7 @@ function editarTema(req, res) {
         conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema = ${cveTema}`, (error, temaData) => {
             if(!error){
                 req.getConnection((err, conn) => {
-                    conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
+                    conn.query(`SELECT cveMaterial, rutaMaterial, cveTema, nombreMaterial FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
                         if(!err){
                             console.log("Se elimino el tema correctamente.");
                             res.render('curso/editarTema',{temas:temaData, material:materialData, sesion: req.token.user})
@@ -401,7 +397,7 @@ function modificarTema(req, res){
                 conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema =  ${cveTema}`, (error, temaData) => {
                     if(!error){
                         req.getConnection((err, conn) => {
-                            conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
+                            conn.query(`SELECT cveMaterial, rutaMaterial, cveTema, nombreMaterial FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
                                 if(!error){
                                     console.log("Se elimino el tema correctamente.");
                                     res.render('curso/editarTema',{cambioTema:true, temas:temaData, material:materialData, sesion: req.token.user})
@@ -431,16 +427,17 @@ function agregarMaterial(req, res){
         nombreArchivo = req.file.filename;
      }
      var cveTema = req.body.cveTema;
+     var titulo = req.body.nombre;
     console.log(nombreArchivo+ "Tema" + cveTema);
     req.getConnection((err, conn) => {
-        conn.query(`INSERT INTO tblMaterial (rutaMaterial, fechaRegistro, cveTema) 
-        values ('${nombreArchivo}', CURDATE(), ${cveTema})`, (err, rows) => {
+        conn.query(`INSERT INTO tblMaterial (rutaMaterial, fechaRegistro, cveTema, nombreMaterial) 
+        values ('${nombreArchivo}', CURDATE(), ${cveTema}, '${titulo}')`, (err, rows) => {
             if(!err){
                 req.getConnection((err, conn) => {
                     conn.query(`SELECT tt.cveTema, tt.nombre, tt.descripcion, tt.teoria, tt.rutaImagen, tc.cveCurso, ts.cveSeccion FROM tblTema tt INNER JOIN tblSeccion ts ON tt.cveSeccion = ts.cveSeccion INNER JOIN tblCurso tc ON ts.cveCurso = tc.cveCurso WHERE cveTema = ${cveTema}`, (error, temaData) => {
                         if(!err){
                             req.getConnection((err, conn) => {
-                                conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
+                                conn.query(`SELECT cveMaterial, rutaMaterial, nombreMaterial cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (error, materialData) => {
                                     if(!err){
                                         console.log("Se agrego el material de manera correcta.");
                                         res.render('curso/editarTema',{agregarMaterial:true, temas:temaData, material:materialData, sesion: req.token.user})
@@ -473,7 +470,7 @@ function eliminarMaterial(req, res){
             }else{
                 temaData.forEach(element => {
                     req.getConnection((err, conn) => {
-                        conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (err, materialData) => {
+                        conn.query(`SELECT cveMaterial, rutaMaterial, cveTema, nombreMaterial FROM tblMaterial WHERE cveTema = ${cveTema}`, (err, materialData) => {
                             if(err){
                                 res.render(err)
                             }else{
@@ -506,7 +503,7 @@ function borrarMaterial(req, res){
                 });
                 temaData.forEach(element => {
                     req.getConnection((err, conn) => {
-                        conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${element.cveTema}`, (err, materialData) => {
+                        conn.query(`SELECT cveMaterial, rutaMaterial, cveTema, nombreMaterial FROM tblMaterial WHERE cveTema = ${element.cveTema}`, (err, materialData) => {
                             console.log(element.cveTema)
                             console.log(materialData)
                             if(err){
@@ -534,7 +531,7 @@ function agregarTeoria(req, res){
                 res.render(err)
             }else{
                 req.getConnection((err, conn) => {
-                    conn.query(`SELECT cveMaterial, rutaMaterial, cveTema FROM tblMaterial WHERE cveTema = ${cveTema}`, (err, materialData) => {
+                    conn.query(`SELECT cveMaterial, rutaMaterial, cveTema, nombreMaterial FROM tblMaterial WHERE cveTema = ${cveTema}`, (err, materialData) => {
                         if(err){
                             res.render(err)
                         }else{

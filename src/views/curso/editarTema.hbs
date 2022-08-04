@@ -42,7 +42,7 @@
                     <tbody class="redondeado">
                         {{#each material}}
                         <tr>
-                            <th>{{rutaMaterial}}</th>
+                            <th>{{nombreMaterial}}</th>
                             <form action="../curso/eliminarMaterial" method="post">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="cveMaterial" value="{{cveMaterial}}" hidden>
@@ -72,7 +72,10 @@
                     <form action="../curso/agregarMaterial" method="POST" enctype="multipart/form-data">
                         <div class="container centro">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control black" name="nombre" id="" placeholder="Nombre del material" required>
+                                </div>
+                                <div class="col-md-4">
                                     <input type="file" class="form-control black" name="archivo" id="" required>
                                 {{#each temas}}
                                     <input type="text" class="form-control" name="cveTema" id="" value="{{cveTema}}" hidden>
