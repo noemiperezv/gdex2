@@ -11,5 +11,6 @@ router.get('/usuarios/:id', inicioController.verifytoken,inicioController.listar
 router.get('/editarUsuario/:id', inicioController.verifytoken, inicioController.mostrarUsuario);
 router.post('/editarUsuario', inicioController.verifytoken, inicioController.editarUsuario);
 router.get('/eliminarUsuario/:id', inicioController.verifytoken, inicioController.eliminarUsuario);
+router.get('/eliminarCurso/:id', inicioController.verifytoken, inicioController.eliminarCurso);
 
 module.exports = router;

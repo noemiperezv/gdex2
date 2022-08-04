@@ -35,7 +35,7 @@ function misCursos(req, res) {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user })
+                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  })
             }
 
         });
@@ -135,6 +135,27 @@ function eliminarUsuario(req, res) {
 }
 
 
+function eliminarCurso(req, res) {
+    const cveCurso = req.params.id;
+
+    req.getConnection((err, conn) => {
+        conn.query('DELETE FROM tblestudiantecurso WHERE cveCurso = ?', [cveCurso], (err, estudiantecursodata) => {
+            conn.query('DELETE FROM tblseccion WHERE cveCurso  = ?', [cveCurso], (err, secciondata) => {
+                conn.query('DELETE FROM tblcurso WHERE cveCurso = ?', [cveCurso], (err, cursodata) => {
+                    if (err) {
+                        req.flash('message', 'No se pudo eliminar el curso.');
+                        res.redirect(`/inicio/usuarios`);
+                    } else {
+                        req.flash('message', 'Se eliminó el curso correctamente.');
+                        res.redirect(`/inicio/misCursos`);
+                    }
+
+                });
+            });
+        });
+    });
+}
+
 module.exports = {
 
     inicio,
@@ -147,5 +168,6 @@ module.exports = {
     editarUsuario,
     eliminarUsuario,
     verifytoken,
+    eliminarCurso
 
 }
