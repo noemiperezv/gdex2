@@ -4,12 +4,13 @@ const { promisify } = require('util')
 function inicio(req, res) {
     req.getConnection((err, conn) => {
         conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen, concat_ws(" ", u.nombre, u.apellidos) AS nombreCompleto FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario', (err, cursosdata) => {
+            console.log('Este es el rol '+req.token.user.cveRol);
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/inicio", { cursos: cursosdata, sesion: req.token.user })
+                res.render("inicio/inicio", { cursos: cursosdata, sesion: req.token.user });
+                        
             }
-
         });
     });
 }
@@ -32,11 +33,17 @@ async function verifytoken(req, res, next) {
 
 function misCursos(req, res) {
     req.getConnection((err, conn) => {
-        conn.query('SELECT c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario WHERE u.cveUsuario = ?', [req.token.user.cveUsuario], (err, miscursosdata) => {
+        conn.query('SELECT c.cveCurso, c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen FROM tblcurso c JOIN tblusuario u ON u.cveUsuario = c.cveUsuario WHERE u.cveUsuario = ?', [req.token.user.cveUsuario], (err, miscursosdata) => {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user })
+                if (req.token.user.cveRol != 1) { //Si no es instructor
+                    console.log('el rol del usuario es '+req.token.user.cveRol);
+                    res.render("error/error401");
+                }else{
+                    res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  });
+                } 
+                
             }
 
         });
@@ -50,9 +57,13 @@ function aprendiendo(req, res) {
                 if (err) {
                     res.render(err)
                 } else {
-                    res.render("inicio/aprendiendo", { aprendiendo: aprendiendodata, terminados: terminadosdata, sesion: req.token.user })
+                    if (req.token.user.cveRol != 2) { //Si no es instructor
+                        console.log('el rol del usuario es '+req.token.user.cveRol);
+                        res.render("error/error401");
+                    }else{
+                        res.render("inicio/aprendiendo", { aprendiendo: aprendiendodata, terminados: terminadosdata, sesion: req.token.user });
+                    }   
                 }
-
             });
         });
     });
@@ -123,7 +134,13 @@ function listarUsuarios(req, res) {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/usuarios", { sesion: req.token.user, usuarios: usuariosdata, flash: req.flash('message') });
+                if (req.token.user.cveRol != 3) { //Si no es admin
+                    console.log('el rol del usuario es '+req.token.user.cveRol);
+                    res.render("error/error401");
+                }else{
+                    res.render("inicio/usuarios", { sesion: req.token.user, usuarios: usuariosdata, flash: req.flash('message') });
+                } 
+                
             }
 
         });
@@ -293,7 +310,28 @@ function insertarComentarioRespuesta(req, res){
     });
     }
 
-    
+
+function eliminarCurso(req, res) {
+    const cveCurso = req.params.id;
+
+    req.getConnection((err, conn) => {
+        conn.query('DELETE FROM tblestudiantecurso WHERE cveCurso = ?', [cveCurso], (err, estudiantecursodata) => {
+            conn.query('DELETE FROM tblseccion WHERE cveCurso  = ?', [cveCurso], (err, secciondata) => {
+                conn.query('DELETE FROM tblcurso WHERE cveCurso = ?', [cveCurso], (err, cursodata) => {
+                    if (err) {
+                        req.flash('message', 'No se pudo eliminar el curso.');
+                        res.redirect(`/inicio/usuarios`);
+                    } else {
+                        req.flash('message', 'Se eliminó el curso correctamente.');
+                        res.redirect(`/inicio/misCursos`);
+                    }
+
+                });
+            });
+        });
+    });
+}
+
 module.exports = {
 
     inicio,
@@ -306,9 +344,13 @@ module.exports = {
     editarUsuario,
     eliminarUsuario,
     verifytoken,
+
     updateTemaAvance,
     cargarComentarios,
     cargarComentariosRespuestas,
     insertarComentario,
     insertarComentarioRespuesta,
+
+    eliminarCurso,
+
 }

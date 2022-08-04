@@ -15,6 +15,8 @@ router.get('/updateTemaAvance/:estado/:id/:idCurso', inicioController.verifytoke
 router.get('/cargarComentarios/:idCurso/:idTema', inicioController.verifytoken, inicioController.cargarComentarios);
 router.get('/cargarComentariosRespuestas/:idCurso/:idTema', inicioController.verifytoken, inicioController.cargarComentariosRespuestas);
 router.get('/insertarComentario/:idTema/:idusuario/:comentario', inicioController.verifytoken, inicioController.insertarComentario);
+router.get('/eliminarCurso/:id', inicioController.verifytoken, inicioController.eliminarCurso);
+
 
 router.get('/insertarComentarioRespuesta/:idcomentario/:idusuario/:comentario', inicioController.verifytoken, inicioController.insertarComentarioRespuesta);
 

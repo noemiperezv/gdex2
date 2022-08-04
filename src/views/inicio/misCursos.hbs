@@ -7,6 +7,15 @@
 <section style="padding:50px;">
   <h4>Tus cursos creados</h4>
 
+  {{#if flash}}
+  <div class="alert alert-primary alert-dismissible fade show" role="alert">
+      <strong>{{flash}}</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  {{/if}}
+
   <a href="/curso"><button class="btn btn-primary">Crear curso</button></a>
   <hr>
   {{#ifgt miscursos 0}}
@@ -46,12 +55,12 @@
 
         <div align="center">
           <ul style="display:block;">
-            <a class="cursos_links_editar" href="#" style="text-decoration: none;">
+            <a class="cursos_links_editar" href="/curso/editarCurso/{{cveCurso}}" style="text-decoration: none;">
               <i class="icon-edit" style="font-size: 35px; color: rgb(255, 223, 43);"></i>
               <!--Editar curso-->
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="cursos_links_eliminar" href="#" style="text-decoration: none;">
+            <a class="cursos_links_eliminar" onclick="return confirm('¿Seguro que deseas eliminar este curso?');" href="/inicio/eliminarCurso/{{cveCurso}}" style="text-decoration: none;">
               <i class="icon-trash" style="font-size: 35px; color: rgb(219, 68, 68);"></i>
               <!--Eliminar curso-->
             </a>

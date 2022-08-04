@@ -1,143 +1,285 @@
-{{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
-<main>
-    <div class="centrar">
-        Nombre curso
-    </div>
-    <div class="derecha">
-        Modificar Curso: <a href="#"><button id="myBtn">Editar</button></a>
-    </div>
-
-    <div class="crearCursoForms">
-        <div class="marco ">
-            <div class="centrar">
-                Secciones
-            </div>
-            <hr class="line">
-
-
-
-            <table class="scrollable">
-
-                <thead>
-                    <tr>
-                        <th><span class="text">Nombre</span></th>
-                        <th><span class="text">Eliminar</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-                    <tr>
-                        <th>Sección 1</th>
-                        <th>Borrar</th>
-
-                    </tr>
-
-                </tbody>
-            </table>
-
-
-
-            <hr class="line">
-            <div class="addTemaSeccion">
-                <input type="text" placeholder="Agregar sección">
-                <button>Agregar</button>
-            </div>
+ {{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
+    <main>
+        {{#each miscursos}}
+        <div class="centrar">
+            <h1>{{nombre}}</h1>
         </div>
-        <div class="marco">
-            <div class="centrar">
-                Temas de sección
+        {{/each}}
+        <div class="derecha">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">
+                Modificar Curso
+            </button>
+        </div>
+        <div class="crearCursoForms row justify-content-center">
+            <div class="marco contenedor-secciones col-md-5">
+                <div class="centrar">
+                    Secciones
+                </div>
+                <hr class="line">   
+                    <div class="row">
+                        {{#each secciones}}
+                        <div class="col-md-9">
+                            <form action="/curso/filtrarTemas" method="post">
+                                <input type="text" name="cveCurso" value='{{cveCurso}}' hidden>
+                                <input type="text" name="idSeccion"  value='{{cveSeccion}}' hidden>
+                                <button class="btn btn-outline-primary btn-block" id="contenido-tab" type="submit" aria-selected="true">{{nombre}}</button>
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+                            <form action="/curso/eliminarSeccion" method="post">
+                                <input type="text" name="cveSeccionEliminar" value='{{cveSeccion}}' hidden>
+                                <input type="text" name="cveCurso" value='{{cveCurso}}' hidden>
+                                <button class="btn btn-outline-danger none" type="submit" aria-selected="true"><i class="icon-trash icon-2x" style="color: #f73a06;"></i></button>
+                            </form>
+                        </div>
+                        {{/each}}
+                    </div>
+                <hr class="line">
+                <div class="addTemaSeccion">
+                    <form action="/curso/agregarSeccion" method="post">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <input class="form-control black" type="text" id="nameCurso" name="nombreSeccion" required>
+                                </div>
+                                <div class="form-group">
+                                    {{#each miscursos}}
+                                    <input type="text" value="{{cveCurso}}" name="cveCurso" hidden>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">
+                                    Agregar sección
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <hr class="line">
-
-            <table class="scrollable">
-                <thead>
-                    <tr>
-                        <th><span class="text">Nombre</span></th>
-                        <th><span class="text">Eliminar</span></th>
-                        <th><span class="text">Editar</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Tema 1</th>
-                        <th>Borrar</th>
-                        <th>Editar</th>
-
-                    </tr>
-
-                </tbody>
-            </table>
-            <hr class="line">
-
-            <div class="addTemaSeccion">
-                <input type="text" placeholder="Agregar tema">
-                <button>Agregar</button>
+            {{#if cveSeccion}}
+            <div class="marco contenedor-secciones col-md-5">
+                <div class="centrar">
+                    Temas de sección
+                </div>
+                <hr class="line">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ul class="list-group">
+                                {{#each temasdata}}
+                                    <li class="list-group-item">{{nombreTema}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            {{#each temasdata}}
+                                <form action="/curso/eliminarTema" method="post">
+                                    <input type="text" name="cveTema" value='{{cveTema}}' hidden>
+                                    <input type="text" name="cveSeccion" value='{{cveSeccion}}' hidden>
+                                    <button class="btn btn-outline-danger none" type="submit" aria-selected="true"><i class="icon-trash icon-2x" style="color: #f73a06;"></i></button>
+                                </form>
+                            {{/each}}
+                        </div>
+                        <div class="col-md-1">
+                            {{#each temasdata}}
+                            <form action="/curso/editarTema" method="post">
+                                <input type="text" name="cveTema" value='{{cveTema}}' hidden>
+                                <input type="text" name="cveSeccion" value='{{cveSeccion}}' hidden>
+                                <button type="submit" class="btn btn-outline-success none">
+                                    <i class="icon-pencil icon-2x" style="color: #10b840;"></i>
+                                </button>
+                            </form>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+                <hr class="line">
+                <div class="addTemaSeccion">
+                    <form action="/curso/agregarTema" method="post">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <input class="form-control black" type="text" id="nameTema" name="nombreTema" required>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control black" type="text" id="cveSeccion" name="cveSeccion" value="{{cveSeccion}}" hidden>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control black" type="text" id="cveCurso" name="cveCurso" value="{{cveCurso}}" hidden>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">
+                                    Agregar tema
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+            {{/if}}
         </div>
     </div>
-
 </main>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div>
-            <input class="modalComentario" type="text" placeholder="Deja tu comentario">
-        </div>
-        <div class="btnsModal">
-            <button class="btnCerrarModal">Cancelar</button>
-            <button class="btnComentar">Comentar</button>
-
+    <!-- Modal para editar los campos de un curso-->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#each miscursos}}
+                    <form class="form" action="/curso/modificarCurso" method="post" enctype="multipart/form-data">
+                        <h1 class="centrar">Editar curso</h1>
+                        <div>
+                        <div class="formCrearCurso">
+                            <div class="form-group">
+                                <label for="name">Nombre curso:</label>
+                                <input class="form-control black" type="text" id="nameCurso" name="nameCurso" value="{{nombre}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Imagen Actual:</label>
+                                <div class="imagen">
+                                    <img src="/static/uploads/img/{{rutaImagen}}" class="img-actual" alt="Imagen no disponible">
+                                </div>
+                                <label for="image">Nueva imagen:</label>
+                                <input class="form-control black" type="file" accept="image/png,image/jpeg,image/gif,image/ico,image/icoa,image/jpg" id="imagen" name="imagen" >
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripción:</label>
+                                <textarea align="right" class="form-control black desc" id="descripcion" name="descripcion" cols="30" rows="10" placeholder="{{nombre}}">{{descripcion}}</textarea>
+                            </div>
+                            <input type="text" value="{{cveCurso}}" name="cveCurso" hidden>
+                        </div>
+                        </div>            
+                        <div class="btnsCrearCurso">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input class="btn btn-danger btn-block" type="button" name="btnCancelar" id="btnCancelar" value="Cancelar" data-dismiss="modal"> 
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="btn btn-primary btn-block" type="submit" name="btnCrearCurso" id="btnCrearCurso" value="Guardar">
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </form>
+                    {{/each}}
+                </div>
+            </div>
         </div>
     </div>
+    {{> scripts}}
+<!-- Mensajes de Alerta-->
+    {{#if curso }}
+        <script>
+            Swal.fire({
+                title: "El curso se ha modificado correctamente!",
+                icon:"success",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+                window.location = "/curso/editarCurso/{{cveCurso}}";
+            });
+        </script>
+    {{/if}}
+    {{#if seccion }}
+        <script>
+            Swal.fire({
+                title: "La sección se ha agregado correctamente!",
+                icon:"success",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+                window.location = "/curso/editarCurso/{{cveCurso}}";
+            });
+        </script>
+    {{/if}}
 
-</div>
+    {{#if error_seccion}}
+        <script>
+            Swal.fire({
+                title: "Error al agregar sección, verifique que la información esté correcta!",
+                icon:"error",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+                window.location = "/curso/editarCurso/{{cveCurso}}";
+            });
+        </script>
+    {{/if}}
 
-{{> footer }}
+    {{#if tema }}
+        <script>
+            Swal.fire({
+                title: "El tema se ha agregado correctamente!",
+                icon:"success",
+                type: "success",
+                showConfirmButton: true
+            }).then(function() {
+            });
+        </script>
+    {{/if}}
+
+    {{#if eliminarSeccion}}
+        <script>
+            Swal.fire({
+            title: '¿Estás seguro que deseas eliminar esta sección?',
+            text: "¡Al borrarla se eliminaran todos los temas de la sección y no podras revertir los cambios!",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, eliminarla!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '/curso/borrarSeccion/{{cveSeccion}}';
+                Swal.fire(
+                'Borrada!',
+                'La sección ha sido eliminada.',
+                'success'
+                )
+            }
+            })
+        </script>
+    {{/if}}
+
+    {{#if eliminarTema}}
+        <script>
+            Swal.fire({
+            title: '¿Estás seguro que deseas eliminar esta tema?',
+            text: "¡Se elimanara todo el contenido relacionado, y no podras revertir los cambios!",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, eliminarlo!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '/curso/borrarTema/{{cveTema}}';
+                Swal.fire(
+                'Borrado!',
+                'El tema ha sido eliminado.',
+                'success'
+                )
+            }
+            })
+        </script>
+    {{/if}}
+<!-- Mensajes de Alerta-->
+<script>
+  $("#editarTema").modal("show");
+</script>
+
+<script src="/static/js/funciones.js"></script>
+
+
