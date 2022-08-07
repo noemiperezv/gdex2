@@ -15,7 +15,9 @@ async function verifytoken(req, res, next) {
 
     if (req.cookies.jwt) {
         const decodificada = await promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+
         req.token = decodificada;
+
         //req.user = results[0];
         next();
     } else {
@@ -30,12 +32,12 @@ function crearCurso(req, res) {
 function editarCurso(req, res) {
     var id = req.params.id;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ${id}`, (err, cursodata) => {
+        conn.query(`SELECT nombre, descripcion, estatus, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, rutaImagen, cveCurso FROM tblcurso WHERE cveCurso = ?`,[id], (err, cursodata) => {
             if(err){
                 res.render(err)
             }else{
                 req.getConnection((err, conn) => {
-                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ${id}`, (err, seccionesdata) => {
+                    conn.query(`SELECT nombre, descripcion, estatus, cveSeccion, date_format(fechaRegistro, "%d-%m-%Y") AS fecha, cveCurso FROM tblseccion WHERE cveCurso = ?`,[id], (err, seccionesdata) => {
                         if(err){
                             res.render(err)
                         }else{

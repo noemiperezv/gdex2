@@ -1,4 +1,4 @@
-/* COMENTADO
+
 //Desplegar div
 var acc = document.getElementsByClassName("accordion");
 var i;
@@ -39,17 +39,22 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
 
-btn.onclick = function() {
+function comentar() {
+  
   modal.style.display = "block";
 }
-
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 var btnModalCancelar = document.getElementsByClassName("btnCerrarModal")[0];
+var btnModalCancelar2 = document.getElementsByClassName("btnCerrarModal2")[0];
+btnModalCancelar2.onclick = function() {
+  modal.style.display = "none";
+   document.getElementsByClassName("modalComentario")[0].value="";
 
+}
 btnModalCancelar.onclick = function() {
   modal.style.display = "none";
    document.getElementsByClassName("modalComentario")[0].value="";
@@ -61,4 +66,4 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-*/
+

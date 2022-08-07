@@ -6,21 +6,33 @@ const { validationResult } = require('express-validator');
 
 
 function login(req, res) {
-    if (req.session.loggedin != true) {
-        //res.render('auth/index', {flash: req.flash('message')});
-        res.render('auth/index');
-    } else {
+    if (req.cookies.jwt) {
+
+        const decodificada =  promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+
+
+        req.token = decodificada;
+
         res.redirect('/inicio');
+    } else {
+        res.render('auth/index');
     }
 
 }
 
 function registrar(req, res) {
-    if (req.session.loggedin != true) {
-        res.render('auth/registrar');
-    } else {
+    if (req.cookies.jwt) {
+
+        const decodificada =  promisify(jwt.verify)(req.cookies.jwt, 'secretkey')
+
+
+        req.token = decodificada;
+
         res.redirect('/inicio');
+    } else {
+        res.render('auth/registrar');
     }
+
 }
 
 
@@ -53,10 +65,10 @@ function auth(req, res) {
                             req.session.email = element.email;
                             req.session.fechaRegistro = element.fechaRegistro;
                             req.session.cveRol = element.cveRol;
-                            const token = jwt.sign({ user: element[0] }, 'secretkey', { expiresIn: '1h' })
+                            const token = jwt.sign({ user: element[0] }, 'secretkey', { expiresIn: '2h' })
 
                             const cookiesOptions = {
-                                expires: new Date(Date.now() + 50000),
+                                expires: new Date(Date.now() + (3500000*2)),
                                 httpOnly: true
                             }
                             res.cookie('jwt', token, cookiesOptions)
@@ -119,10 +131,11 @@ function regUser(req, res) {
                                             req.session.cveRol = datos.cveRol;
 
                                         });
-                                        const token = jwt.sign({ user: element[0] }, 'secretkey', { expiresIn: '1h' })
+                                        const token = jwt.sign({ user: element[0] }, 'secretkey', { expiresIn: '2h' })
 
                                         const cookiesOptions = {
-                                            expires: new Date(Date.now() + 50000),
+                                            expires: new Date(Date.now() + (3500000*2)),
+                                                                          
                                             httpOnly: true
                                         }
                                         res.cookie('jwt', token, cookiesOptions)
@@ -142,10 +155,12 @@ function regUser(req, res) {
     }
 }
 
+
 module.exports = {
     login,
     registrar,
     logout,
     regUser,
-    auth
+    auth,
+    
 }

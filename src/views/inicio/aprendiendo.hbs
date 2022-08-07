@@ -25,20 +25,23 @@
         {{#each aprendiendo}}
         <div class="card">
 
-        {{#if rutaImagen}}
-        <div align="center">
-          <img class="card-img-top" src="/static/uploads/img/{{rutaImagen}}" style="width:250px; height:auto;"
-            alt="Card image cap">
-        </div>
-        {{else}}
-        <div align="center">
-          <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;" alt="Card image cap">
-        </div>
-        {{/if}}
+          {{#if rutaImagen}}
+          <div align="center">
+            <img class="card-img-top" src="/static/uploads/img/{{rutaImagen}}" style="width:250px; height:auto;"
+              alt="Card image cap">
+          </div>
+          {{else}}
+          <div align="center">
+            
+              <img class="card-img-top" src="/static/img/logo.png" style="width:250px; height:auto;"
+                alt="Card image cap">
+            
+          </div>
+          {{/if}}
 
           <div class="card-body">
             <h5 class="card-title">
-              <p>{{nombre}}</p>
+            <a href="/inicio/seguirCurso/{{cveCurso}}/{{ultimoTema}}">  <p>{{nombre}}</p></a>
             </h5>
 
             {{#if avanceCurso }}
@@ -100,7 +103,7 @@
 
           <div class="card-body">
             <h5 class="card-title">
-              <p>{{nombre}}</p>
+              <a href="/inicio/seguirCurso/{{cveCurso}}/term"><p>{{nombre}}</p></a>
             </h5>
 
             {{#if avanceCurso }}
