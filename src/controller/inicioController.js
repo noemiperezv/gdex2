@@ -1,3 +1,4 @@
+const { connect } = require("http2");
 const jwt = require("jsonwebtoken");
 const { promisify } = require('util')
 
@@ -35,7 +36,7 @@ function misCursos(req, res) {
             if (err) {
                 res.render(err)
             } else {
-                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user })
+                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  })
             }
 
         });
@@ -58,9 +59,59 @@ function aprendiendo(req, res) {
 }
 
 
-function verCurso(req, res) {
-    res.render("inicio/verCurso");
+function verCurs(req, res) {
+    var cveCurso = req.params.cveCurso;
+    cveCurso = 21;
+    req.getConnection ((err, conn)  => { 
+        conn.query(`SELECT cveCurso, c.nombre, c.descripcion, c.estatus, date_format(c.fechaRegistro, "%d-%m-%Y") AS fecha, c.rutaImagen,  CONCAT(tu.nombre, ' ', tu.apellidos) as instructor from tblCurso c inner join tblUsuario tu on c.cveUsuario = tu.cveUsuario where cveCurso =  ${cveCurso}`, (error, cursodata) =>{
+            if(!error){
+                console.log(cursodata)
+                conn.query (`select nombre, cveSeccion from tblseccion WHERE cveCurso = ${cveCurso}`, (error1, secciondata) => {
+                    if(!error1){
+                        conn.query(`SELECT tt.cveTema, tt.nombre, ts.cveSeccion FROM tblTema tt inner join tblseccion ts on tt.cveSeccion = ts.cveSeccion WHERE cveCurso = ${cveCurso}`,(error2, temadata)=>{
+                            if(!error2){
+                                res.render ("inicio/vercurso", {curso: cursodata,secciones:secciondata, temas: temadata, sesion: req.token.user, cveCurso: cveCurso})
+                            }
+                        })
+    
+                    }else {
+                        
+                res.render (error1)
+                    }
+                })
+            } else{
+                res.render (error)
+            }
+        
+        });
+        
+    });
+        
 }
+function verCurso(req, res) {
+    idCurso = req.params.id;
+
+    req.getConnection((err, conn) => {
+        conn.query(`SELECT cur.cveCurso, cur.nombre as curnom, concat(day(cur.fechaRegistro),' ',mes(cur.fechaRegistro, 'es_ES'),' ', year(cur.fechaRegistro)) as fecha , cur.rutaImagen as ruta, cur.descripcion, CONCAT(usu.nombre, ' ', usu.apellidos) as instructor  FROM tblcurso as cur inner join tblusuario  as usu on usu.cveUsuario = cur.cveUsuario WHERE cur.cveCurso = ?`, [idCurso], (err, curso) => {
+        conn.query('SELECT cveSeccion, nombre from tblseccion WHERE cveCurso = ?', [idCurso], (err, secciones) => {
+        conn.query(`select tem.cveTema, tem.cveSeccion as secTem, tem.nombre as nam from tblseccion as sec  LEFT JOIN tbltema as tem on tem.cveSeccion = sec.cveSeccion  WHERE  sec.cveCurso = ?`, [idCurso], (err, temas) => {
+        conn.query(`SELECT avanceCurso FROM tblestudiantecurso WHERE cveCurso = ${idCurso} and cveUsuario = ${req.token.user.cveUsuario}`, (err, existe) => {
+
+            console.log("Existe"+existe)
+            if(existe != null && existe != undefined && existe != "" ){
+                res.render("inicio/verCurso",{ sesion: req.token.user, secciones:secciones, temas:temas, curso:curso, cveCurso: idCurso, idUsuario:req.token.user.cveUsuario, boton:false});
+            }else{
+                res.render("inicio/verCurso",{ sesion: req.token.user, secciones:secciones, temas:temas, curso:curso, cveCurso: idCurso, idUsuario:req.token.user.cveUsuario, boton:true});
+            }
+        })
+    });
+    });
+    });
+    });
+    
+    }
+
+
 
 function seguirCurso(req, res) {
     res.render("inicio/seguirCurso");
@@ -135,6 +186,51 @@ function eliminarUsuario(req, res) {
 }
 
 
+function eliminarCurso(req, res) {
+    const cveCurso = req.params.id;
+
+    req.getConnection((err, conn) => {
+        conn.query('DELETE FROM tblestudiantecurso WHERE cveCurso = ?', [cveCurso], (err, estudiantecursodata) => {
+            conn.query('DELETE FROM tblseccion WHERE cveCurso  = ?', [cveCurso], (err, secciondata) => {
+                conn.query('DELETE FROM tblcurso WHERE cveCurso = ?', [cveCurso], (err, cursodata) => {
+                    if (err) {
+                        req.flash('message', 'No se pudo eliminar el curso.');
+                        res.redirect(`/inicio/usuarios`);
+                    } else {
+                        req.flash('message', 'Se eliminó el curso correctamente.');
+                        res.redirect(`/inicio/misCursos`);
+                    }
+
+                });
+            });
+        });
+    });
+}
+
+function asignarCurso(req, res){
+    var cveCurso = req.body.cveCurso;
+    var cveUsuario = req.body.cveUsuario;
+    var ultimoTema = 1;
+    var avanceCurso = 0;
+
+    req.getConnection((err, conn) => {
+        conn.query(`INSERT INTO tblestudiantecurso (cveUsuario, cveCurso, ultimoTema, avanceCurso) VALUES (${cveUsuario}, ${cveCurso}, ${ultimoTema}, ${avanceCurso})`, (error, rows) => {
+            if(!error){
+                conn.query(`SELECT cur.cveCurso, cur.nombre as curnom, concat(day(cur.fechaRegistro),' ',mes(cur.fechaRegistro, 'es_ES'),' ', year(cur.fechaRegistro)) as fecha , cur.rutaImagen as ruta, cur.descripcion, CONCAT(usu.nombre, ' ', usu.apellidos) as instructor  FROM tblcurso as cur inner join tblusuario  as usu on usu.cveUsuario = cur.cveUsuario WHERE cur.cveCurso = ?`, [idCurso], (err, curso) => {
+                    conn.query('SELECT cveSeccion, nombre from tblseccion WHERE cveCurso = ?', [idCurso], (err, secciones) => {
+                    conn.query(`select tem.cveTema, tem.cveSeccion as secTem, tem.nombre as nam from tblseccion as sec  LEFT JOIN tbltema as tem on tem.cveSeccion = sec.cveSeccion  WHERE  sec.cveCurso = ?`, [idCurso], (err, temas) => {
+                    res.render("inicio/verCurso",{ sesion: req.token.user, secciones:secciones, temas:temas, curso:curso, cveCurso: idCurso, idUsuario:req.token.user.cveUsuario, asignar:true});
+                });
+                });
+                });
+            }
+            else{
+                res.render(error)
+            }
+        })
+    })
+}
+
 module.exports = {
 
     inicio,
@@ -147,5 +243,7 @@ module.exports = {
     editarUsuario,
     eliminarUsuario,
     verifytoken,
+    eliminarCurso,
+    asignarCurso
 
 }

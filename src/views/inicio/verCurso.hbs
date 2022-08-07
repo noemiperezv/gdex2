@@ -1,60 +1,77 @@
 {{> navbar nombre = sesion.nombre idRol = sesion.cveRol cveUsuario = sesion.cveUsuario }}
-
 <main class="contenedor sombra">
     <div class="descripcion">
+      {{#each curso}}
         <div class="">
-            <img class="imgCurso" src="../publico/img/hero.jpg" alt="">
+            <img class="imgCurso" src="/static/uploads/img/{{ruta}}" alt="">
         </div>
         <hr class="separacion">
-        <div>
-            <h2>Nombre curso</h2>
-            <p class="parrafo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus iste voluptatibus
-                veniam vel
-                placeat culpa, aliquam officia sequi, in, consectetur modi vero pariatur sapiente fuga accusamus
-                tempora saepe ipsum nam!</p>
+        <div>  
+            <h2>{{curnom}}</h2>
+            <p class="parrafo">{{descripcion}}</p>
             <div class="gridDatosCurso">
                 <div>
-                    Fecha creacion
+                    {{fecha}}
                 </div>
                 <div>
-                    Fecha ultima modificación
+                    {{instructor}}
                 </div>
+                {{#if ../boton}}
                 <div>
-                    Instructor
+                  <form action="/inicio/asignarCurso" method="post" type="submit">
+                    <input type="text" name="cveCurso" value="{{cveCurso}}" hidden>
+                    <input type="text" name="cveUsuario" value="{{../idUsuario}}" hidden>
+                    <button class="btn btn-success">Agregar a mis cursos</button>
+                  </form>
                 </div>
+                {{/if}}
             </div>
         </div>
+      {{/each}}
     </div>
     <hr class="separacion">
     <div class="centrar seccionesCurso">
-        <h2>Secciones del curso</h2>
-        <div class="frame">
-            <button class="accordion">Section 1</button>
-            <div class="panel">
-                <ul>
-                    <li>Matematicas 1</li>
-                    <hr>
-                    <li>Matematicas 2</li>
-                </ul>
+        <div id="accordion">
+  {{#each secciones}}
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{cveSeccion}}" aria-expanded="true" aria-controls="collapseOne">
+        {{nombre}}
+        </button>
+      </h5>
+    </div>
+    <div id="collapse{{cveSeccion}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+        {{#each ../temas}}
+          {{#ifeq ../cveSeccion secTem}}
+          <div class="row justify-content-center">
+            <div class="col-md-4">
+              <li class="list-group-item">{{nam}}</li>
             </div>
-
-            <button class="accordion">Section 2</button>
-            <div class="panel">
-                <ul>
-                    <li>Matematicas 1</li>
-                    <hr>
-                    <li>Matematicas 2</li>
-                </ul>
-            </div>
-
-            <button class="accordion">Section 3</button>
-            <div id="foo" class="panel">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat.</p>
-            </div>
-        </div>
+          </div>
+          {{/ifeq}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</div>
     </div>
 </main>
 
 {{> footer }}
+{{> scripts}}
+
+{{#if asignar}}
+  <script>
+    Swal.fire({
+      title: "Asignado con éxito!!",
+      icon:"success",
+      type: "success",
+      showConfirmButton: true
+    }).then(function() {
+      window.location = "/inicio/aprendiendo";
+    });
+  </script>
+{{/if}}
