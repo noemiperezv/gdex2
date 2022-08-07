@@ -38,17 +38,12 @@ function misCursos(req, res) {
             if (err) {
                 res.render(err)
             } else {
-<<<<<<< HEAD
-                res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  })
-=======
                 if (req.token.user.cveRol != 1) { //Si no es instructor
                     console.log('el rol del usuario es '+req.token.user.cveRol);
                     res.render("error/error401");
                 }else{
                     res.render("inicio/misCursos", { miscursos: miscursosdata, sesion: req.token.user, flash: req.flash('message')  });
                 } 
-                
->>>>>>> 2a3f8d67f3f45571923f17da1271c23aeb5df580
             }
 
         });
@@ -74,8 +69,6 @@ function aprendiendo(req, res) {
     });
 }
 
-
-<<<<<<< HEAD
 function verCurs(req, res) {
     var cveCurso = req.params.cveCurso;
     cveCurso = 21;
@@ -103,12 +96,6 @@ function verCurs(req, res) {
         });
         
     });
-        
-=======
-function verCurso(req, res) {
-
-    res.render("inicio/verCurso");
->>>>>>> 2a3f8d67f3f45571923f17da1271c23aeb5df580
 }
 function verCurso(req, res) {
     idCurso = req.params.id;
@@ -262,8 +249,6 @@ function eliminarUsuario(req, res) {
 }
 
 
-<<<<<<< HEAD
-=======
 function updateTemaAvance(req, res) {
     id = req.params.id
     estado = req.params.estado
@@ -373,8 +358,6 @@ function insertarComentarioRespuesta(req, res){
     });
     }
 
-
->>>>>>> 2a3f8d67f3f45571923f17da1271c23aeb5df580
 function eliminarCurso(req, res) {
     const cveCurso = req.params.id;
 
@@ -395,8 +378,6 @@ function eliminarCurso(req, res) {
         });
     });
 }
-
-<<<<<<< HEAD
 function asignarCurso(req, res){
     var cveCurso = req.body.cveCurso;
     var cveUsuario = req.body.cveUsuario;
@@ -420,9 +401,6 @@ function asignarCurso(req, res){
         })
     })
 }
-
-=======
->>>>>>> 2a3f8d67f3f45571923f17da1271c23aeb5df580
 module.exports = {
 
     inicio,
