@@ -414,14 +414,12 @@ module.exports = {
     eliminarUsuario,
     verifytoken,
     eliminarCurso,
-    asignarCurso
-
+    asignarCurso,
     updateTemaAvance,
     cargarComentarios,
     cargarComentariosRespuestas,
     insertarComentario,
     insertarComentarioRespuesta,
-
     eliminarCurso,
 
 }
