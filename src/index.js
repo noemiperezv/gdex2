@@ -58,13 +58,8 @@ app.use(myconnection(mysql, {
     host: 'localhost',
     user: 'root',
     password: '',
-<<<<<<< HEAD
     port: '3306',
     database: 'gdex2'
-=======
-    port: '3309',
-    database: 'gdex'
->>>>>>> 2a3f8d67f3f45571923f17da1271c23aeb5df580
 }));
 //Uso de sesiones
 app.use(session({
