@@ -144,16 +144,20 @@
                                 <input class="form-control black" type="text" id="nameCurso" name="nameCurso" value="{{nombre}}" required>
                             </div>
                             <div class="form-group">
+                                {{#if rutaImagen}}
                                 <label for="image">Imagen Actual:</label>
                                 <div class="imagen">
                                     <img src="/static/uploads/img/{{rutaImagen}}" class="img-actual" alt="Imagen no disponible">
                                 </div>
                                 <label for="image">Nueva imagen:</label>
+                                {{else}}
+                                <label for="image">Imagen:</label>
+                                {{/if}}
                                 <input class="form-control black" type="file" accept="image/png,image/jpeg,image/gif,image/ico,image/icoa,image/jpg" id="imagen" name="imagen" >
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripción:</label>
-                                <textarea align="right" class="form-control black desc" id="descripcion" name="descripcion" cols="30" rows="10" placeholder="{{nombre}}">{{descripcion}}</textarea>
+                                <textarea align="right" class="form-control black-2 desc" id="descripcion" name="descripcion" cols="30" rows="10" placeholder="{{nombre}}">{{descripcion}}</textarea>
                             </div>
                             <input type="text" value="{{cveCurso}}" name="cveCurso" hidden>
                         </div>
