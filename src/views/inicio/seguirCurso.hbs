@@ -58,12 +58,15 @@
             <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
 
             {{#ifeq bandera.bandera 'fin'}}
+           
             <div>
                 <h1 class="centrar"> {{felicidades.nombre}}</h1>
             </div>
             <p name="idtema" id="term" hidden>term</p>
             {{else}}
+            
             {{#each temaActual}}
+            
             <div>
 
             </div>
@@ -77,7 +80,7 @@
             </div>
             <div>
                 <p name="cursoid" id="{{cursoid}}" hidden>{{cursoid}}</p>
-                <h2 class="centrar">Descripción</h2>
+                <h2 class="centrar">Descripción:</h2>
                 <p style="margin-left: 50px; margin-right: 50px;">{{descripcion}}</p>
 
             </div>
@@ -260,6 +263,7 @@
             $('button[name="comentar"]').mousedown(function () {
 
                 var idtema = $(' p[name="idtema"]').attr('id');
+                console.log(idtema)
                 var comentario = $('input[name="Comentario"]').val();
                 var idusuario = $('p[name="cveusuario"]').attr('id');
                 if (comentario.length == 0) {
